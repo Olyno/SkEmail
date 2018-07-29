@@ -30,7 +30,7 @@ public class ScopeEmail extends EffectSection {
 	public static EmailBuilder lastEmail;
 	
 	static {
-		Skript.registerCondition(ScopeEmail.class, "(make|do|create) [new] [e]mail");
+		Skript.registerCondition(ScopeEmail.class, "(make|do|create) [new] ([e]mail|[e]mail %-emailbuilder%)");
 	}
 
 	private Expression<EmailBuilder> builder;
@@ -38,7 +38,7 @@ public class ScopeEmail extends EffectSection {
 	@Override
 	public void execute(Event e) {
 		EmailBuilder email = builder == null ? new EmailBuilder() : builder.getSingle(e);
-        lastEmail = email == null ? new EmailBuilder() : email;
+        	lastEmail = email == null ? new EmailBuilder() : email;
 	//	lastEmail = ScopeEmail.lastEmail == null ? new EmailBuilder() : builder.getSingle(e);
 		Skript.warning("Last email: " + lastEmail.getAuthor());
 		runSection(e);
