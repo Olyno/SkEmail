@@ -8,7 +8,6 @@ import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.ExpressionType;
-import ch.njol.util.coll.CollectionUtils;
 
 @Name("Author of Email")
 @Description("Returns the author of an email. Can be set in a email scope")
@@ -39,34 +38,28 @@ public class ExprAuthorOfEmail extends SimplePropertyExpression<EmailBuilder, St
 		return "author";
 	}
 	
-	   @Override
-	   public void change(Event e, Object[] delta, ChangeMode mode){
-	       if (delta != null) {
-	           EmailBuilder email = getExpr().getSingle(e);
-	           if (mode != ChangeMode.SET && mode != ChangeMode.REMOVE && email == null) return;
-	           String author = (String) delta[0];
-	           switch (mode) {
-	               case ADD:
-	               case DELETE:
-	               case REMOVE:
-	                   email.setAuthor(null);
-	                   break;
-	               case REMOVE_ALL:
-	               case RESET:
-	               case SET:
-	                   email.setAuthor(author);
-	                   Skript.warning("author:" + author);
-	                   break;
-	               default:
-	                   assert false;
-	           }
-	       }
-	   }
-	 
-	   @Override
-	   public Class<?>[] acceptChange(final ChangeMode mode) {
-	       return (mode != ChangeMode.REMOVE_ALL) ? CollectionUtils.array(Number.class) :  null;
-	   }
+	@Override
+	public void change(Event e, Object[] delta, ChangeMode mode) {
+	    for (EmailBuilder email : getExpr().getArray(e)) {    
+	        switch (mode) {
+	            case SET:
+	                email.setAuthor((String) delta[0]);
+	                break;
+	            case DELETE:
+	                email.setAuthor(null);
+			default:
+				break;
+	        }
+	    }
+	}
+
+	@Override
+	public Class<?>[] acceptChange(final ChangeMode mode) {
+	    if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
+	        return new Class[]{String.class};
+	    }
+	    return null;
+	}
 }
 
 
