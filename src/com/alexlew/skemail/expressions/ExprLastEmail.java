@@ -13,16 +13,16 @@ import com.alexlew.skemail.types.EmailBuilder;
 import com.alexlew.skemail.scopes.ScopeEmail;
 
 @Name("Last Email")
-@Description("Return last email builder result")
+@Description("Returns the email that was last made in a email scope")
 @Examples({
-			"send last email"
+			"set {_email} to the last email"
 	})
 @Since("1.0")
 
 public class ExprLastEmail extends SimpleExpression<EmailBuilder> {
 
     static {
-    	Skript.registerExpression(ExprLastEmail.class, EmailBuilder.class, ExpressionType.SIMPLE, "[the] last[ly] [(made|created)] email[[ ]builder]");
+    	Skript.registerExpression(ExprLastEmail.class, EmailBuilder.class, ExpressionType.SIMPLE, "[the] last[ly] [(made|created|did)] email[[ ]builder]");
     }
 
     @Override
