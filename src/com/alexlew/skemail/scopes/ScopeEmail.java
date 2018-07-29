@@ -37,7 +37,9 @@ public class ScopeEmail extends EffectSection {
 	
 	@Override
 	public void execute(Event e) {
-		lastEmail = ScopeEmail.lastEmail == null ? new EmailBuilder() : builder.getSingle(e);
+		EmailBuilder email = builder == null ? new EmailBuilder() : builder.getSingle(e);
+        lastEmail = email == null ? new EmailBuilder() : email;
+	//	lastEmail = ScopeEmail.lastEmail == null ? new EmailBuilder() : builder.getSingle(e);
 		Skript.warning("Last email: " + lastEmail.getAuthor());
 		runSection(e);
 	}
@@ -47,6 +49,7 @@ public class ScopeEmail extends EffectSection {
 		return "make new email " + lastEmail.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
 		if (checkIfCondition())
@@ -55,6 +58,7 @@ public class ScopeEmail extends EffectSection {
 			Skript.error("An email creation scope is useless without any content!");
 			return false;
 		}
+		builder = (Expression<EmailBuilder>) exprs[0];
 		loadSection(true);
 		return true;
 	}
