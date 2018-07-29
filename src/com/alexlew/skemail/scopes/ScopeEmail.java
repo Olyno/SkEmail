@@ -37,8 +37,7 @@ public class ScopeEmail extends EffectSection {
 	
 	@Override
 	public void execute(Event e) {
-		EmailBuilder email = builder == null ? new EmailBuilder() : builder.getSingle(e);
-		lastEmail = email == null ? new EmailBuilder() : email;
+		lastEmail = ScopeEmail.lastEmail == null ? new EmailBuilder() : builder.getSingle(e);
 		Skript.warning("Last email: " + lastEmail.getAuthor());
 		runSection(e);
 	}
