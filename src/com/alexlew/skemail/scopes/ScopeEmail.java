@@ -10,7 +10,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailBuilder;
+import com.alexlew.skemail.types.EmailBuilderbase;
 import com.alexlew.skemail.util.EffectSection;
 
 @Name("Scope Email")
@@ -27,20 +27,19 @@ import com.alexlew.skemail.util.EffectSection;
 
 public class ScopeEmail extends EffectSection {
 	
-	public static EmailBuilder lastEmail;
+	public static EmailBuilderbase lastEmail;
 	
 	static {
-		Skript.registerCondition(ScopeEmail.class, "(make|do|create) [new] ([e]mail|[e]mail %-emailbuilder%)");
+		Skript.registerCondition(ScopeEmail.class, 
+				"(make|do|create) [new] ([e]mail|[e]mail %-emailbuilderbase%)");
 	}
 
-	private Expression<EmailBuilder> builder;
+	private Expression<EmailBuilderbase> builder;
 	
 	@Override
 	public void execute(Event e) {
-		EmailBuilder email = builder == null ? new EmailBuilder() : builder.getSingle(e);
-        	lastEmail = email == null ? new EmailBuilder() : email;
-	//	lastEmail = ScopeEmail.lastEmail == null ? new EmailBuilder() : builder.getSingle(e);
-		Skript.warning("Last email: " + lastEmail.getAuthor());
+		EmailBuilderbase email = builder == null ? new EmailBuilderbase() : builder.getSingle(e);
+        lastEmail = email == null ? new EmailBuilderbase() : email;
 		runSection(e);
 	}
 
@@ -58,7 +57,7 @@ public class ScopeEmail extends EffectSection {
 			Skript.error("An email creation scope is useless without any content!");
 			return false;
 		}
-		builder = (Expression<EmailBuilder>) exprs[0];
+		builder = (Expression<EmailBuilderbase>) exprs[0];
 		loadSection(true);
 		return true;
 	}

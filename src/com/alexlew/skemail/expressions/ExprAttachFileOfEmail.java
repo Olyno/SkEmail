@@ -4,13 +4,12 @@ import java.io.File;
 
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailBuilder;
+import com.alexlew.skemail.types.EmailBuilderbase;
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.ExpressionType;
-import ch.njol.util.coll.CollectionUtils;
 
 @Name("Author of Email")
 @Description("Returns the author of an email. Can be set in a email scope")
@@ -20,10 +19,11 @@ import ch.njol.util.coll.CollectionUtils;
 	})
 @Since("1.0")
 
-public class ExprAttachFileOfEmail extends SimplePropertyExpression<EmailBuilder, File> {
+public class ExprAttachFileOfEmail extends SimplePropertyExpression<EmailBuilderbase, File> {
 
 	static {
-		Skript.registerExpression(ExprAttachFileOfEmail.class, File.class, ExpressionType.PROPERTY, "%emailbuilder%'s attach file", "attach file of %emailbuilder%");
+		Skript.registerExpression(ExprAttachFileOfEmail.class, File.class, ExpressionType.PROPERTY, 
+				"%emailbuilderbase%'s attach file", "attach file of %emailbuilderbase%");
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ExprAttachFileOfEmail extends SimplePropertyExpression<EmailBuilder
 	}
 
 	@Override
-	public File convert(EmailBuilder email) {
+	public File convert(EmailBuilderbase email) {
 		return email.getAttach_file();
 	}
 
@@ -41,34 +41,29 @@ public class ExprAttachFileOfEmail extends SimplePropertyExpression<EmailBuilder
 		return "attach file";
 	}
 	
-	   @Override
-	   public void change(Event e, Object[] delta, ChangeMode mode){
-	       if (delta != null) {
-	           EmailBuilder email = getExpr().getSingle(e);
-	           if (mode != ChangeMode.SET && mode != ChangeMode.REMOVE && email == null) return;
-	           String pth = (String) delta[0];
-	           switch (mode) {
-	               case ADD:
-	               case DELETE:
-	               case REMOVE:
-	                   email.setAttach_file(null);
-	                   break;
-	               case REMOVE_ALL:
-	               case RESET:
-	               case SET:
-	            	   File file = new File(pth);
-	                   email.setAttach_file(file);
-	                   break;
-	               default:
-	                   assert false;
-	           }
-	       }
-	   }
-	 
-	   @Override
-	   public Class<?>[] acceptChange(final ChangeMode mode) {
-	       return (mode != ChangeMode.REMOVE_ALL) ? CollectionUtils.array(Number.class) :  null;
-	   }
+	@Override
+	public void change(Event e, Object[] delta, ChangeMode mode) {
+	    for (EmailBuilderbase email : getExpr().getArray(e)) {    
+	        switch (mode) {
+	            case SET:
+	            	File file = new File((String) delta[0]);
+	                email.setAttach_file(file);
+	                break;
+	            case DELETE:
+	                email.setAttach_file(null);
+			default:
+				break;
+	        }
+	    }
+	}
+
+	@Override
+	public Class<?>[] acceptChange(final ChangeMode mode) {
+	    if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
+	        return new Class[]{String.class};
+	    }
+	    return null;
+	}
 }
 
 

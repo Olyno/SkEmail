@@ -9,7 +9,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailBuilder;
+import com.alexlew.skemail.types.EmailBuilderbase;
 import com.alexlew.skemail.scopes.ScopeEmail;
 
 @Name("Last Email")
@@ -19,10 +19,11 @@ import com.alexlew.skemail.scopes.ScopeEmail;
 	})
 @Since("1.0")
 
-public class ExprLastEmail extends SimpleExpression<EmailBuilder> {
+public class ExprLastEmail extends SimpleExpression<EmailBuilderbase> {
 
     static {
-    	Skript.registerExpression(ExprLastEmail.class, EmailBuilder.class, ExpressionType.SIMPLE, "[the] last[ly] [(made|created|did)] email[[ ]builder]");
+    	Skript.registerExpression(ExprLastEmail.class, EmailBuilderbase.class, ExpressionType.SIMPLE, 
+    			"[the] last[ly] [(made|created|did)] email[[ ]builder]");
     }
 
     @Override
@@ -31,13 +32,13 @@ public class ExprLastEmail extends SimpleExpression<EmailBuilder> {
     }
 
     @Override
-    protected EmailBuilder[] get(Event e) {
-        return new EmailBuilder[]{ScopeEmail.lastEmail};
+    protected EmailBuilderbase[] get(Event e) {
+        return new EmailBuilderbase[]{ScopeEmail.lastEmail};
     }
 
     @Override
-    public Class<? extends EmailBuilder> getReturnType() {
-        return EmailBuilder.class;
+    public Class<? extends EmailBuilderbase> getReturnType() {
+        return EmailBuilderbase.class;
     }
 
     @Override

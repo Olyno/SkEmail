@@ -3,7 +3,7 @@ package com.alexlew.skemail.expressions;
 import org.bukkit.event.Event;
 
 import com.alexlew.skemail.scopes.ScopeEmail;
-import com.alexlew.skemail.types.EmailBuilder;
+import com.alexlew.skemail.types.EmailBuilderbase;
 import com.alexlew.skemail.util.EffectSection;
 
 import ch.njol.skript.Skript;
@@ -18,7 +18,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 
 @Name("Email expression")
-@Description("If it isn't inside an email scope, this expression returns a new emailbuilder. " +
+@Description("If it isn't inside an email scope, this expression returns a new emailbuilderbase. " +
         "If it is inside of an email scope, it returns the email that belongs to that scope.")
 @Examples({
 	"# outside a scope",
@@ -28,24 +28,25 @@ import ch.njol.util.Kleenean;
     "# or in a scope",
     "",
     "make a new email:",
-    "\tset title of email to \"TEST\"",
-    "\tset url of the embed to \"https://google.com\"",
-    "\tset title of the embed to \"Google!\"",
+    "\tset object of email to \"TEST\"",
+    "\tset body of email to \"Hey! That's a test!\"",
+    "\tset receiver of email to \"hey@gmailcom\"",
     "set {_email} to last email"
 	})
 @Since("1.0")
 
-public class ExprEmail extends SimpleExpression<EmailBuilder>{
+public class ExprEmail extends SimpleExpression<EmailBuilderbase>{
 
 	static {
-		Skript.registerExpression(ExprEmail.class, EmailBuilder.class, ExpressionType.SIMPLE, "[(the|an|[a] new)] email");
+		Skript.registerExpression(ExprEmail.class, EmailBuilderbase.class, ExpressionType.SIMPLE, 
+				"[(the|an|[a] new)] email");
 	}
 	
 	private boolean scope = false;
 	
 	@Override
-	public Class<? extends EmailBuilder> getReturnType() {
-		return EmailBuilder.class;
+	public Class<? extends EmailBuilderbase> getReturnType() {
+		return EmailBuilderbase.class;
 	}
 
 	@Override
@@ -66,9 +67,9 @@ public class ExprEmail extends SimpleExpression<EmailBuilder>{
 	}
 
 	@Override
-	protected EmailBuilder[] get(Event e) {
-		return new EmailBuilder[]{
-                scope ? ScopeEmail.lastEmail : new EmailBuilder()
+	protected EmailBuilderbase[] get(Event e) {
+		return new EmailBuilderbase[]{
+                scope ? ScopeEmail.lastEmail : new EmailBuilderbase()
 	};
 	}
 }

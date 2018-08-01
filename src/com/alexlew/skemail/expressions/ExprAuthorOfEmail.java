@@ -2,7 +2,7 @@ package com.alexlew.skemail.expressions;
 
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailBuilder;
+import com.alexlew.skemail.types.EmailBuilderbase;
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.*;
@@ -17,10 +17,12 @@ import ch.njol.skript.lang.ExpressionType;
 	})
 @Since("1.0")
 
-public class ExprAuthorOfEmail extends SimplePropertyExpression<EmailBuilder, String> {
+public class ExprAuthorOfEmail extends SimplePropertyExpression<EmailBuilderbase, String> {
 
 	static {
-		Skript.registerExpression(ExprAuthorOfEmail.class, String.class, ExpressionType.PROPERTY, "%emailbuilder%'s author", "author of %emailbuilder%");
+		Skript.registerExpression(ExprAuthorOfEmail.class, String.class, ExpressionType.PROPERTY, 
+				"%emailbuilderbase%'s author", "author of %emailbuilderbase%",
+				"%emailbuilderbase%'s from part", "from part of %emailbuilderbase%");
 	}
 
 	@Override
@@ -29,7 +31,7 @@ public class ExprAuthorOfEmail extends SimplePropertyExpression<EmailBuilder, St
 	}
 
 	@Override
-	public String convert(EmailBuilder email) {
+	public String convert(EmailBuilderbase email) {
 		return email.getAuthor();
 	}
 
@@ -40,7 +42,7 @@ public class ExprAuthorOfEmail extends SimplePropertyExpression<EmailBuilder, St
 	
 	@Override
 	public void change(Event e, Object[] delta, ChangeMode mode) {
-	    for (EmailBuilder email : getExpr().getArray(e)) {    
+	    for (EmailBuilderbase email : getExpr().getArray(e)) {    
 	        switch (mode) {
 	            case SET:
 	                email.setAuthor((String) delta[0]);
