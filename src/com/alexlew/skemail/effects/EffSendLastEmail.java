@@ -1,14 +1,12 @@
 package com.alexlew.skemail.effects;
 
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.MimeMessage;
-
 import org.bukkit.event.Event;
+import org.simplejavamail.email.Email;
+import org.simplejavamail.email.EmailBuilder;
+import org.simplejavamail.mailer.Mailer;
+import org.simplejavamail.mailer.MailerBuilder;
+import org.simplejavamail.mailer.config.TransportStrategy;
+//import org.simplejavamail.util.ConfigLoader;
 
 import com.alexlew.skemail.types.EmailBuilderbase;
 
@@ -53,6 +51,7 @@ public class EffSendLastEmail extends Effect {
 		String receiver = email.getSingle(e).getReceiver();
 		String object = email.getSingle(e).getObject();
 		String body = email.getSingle(e).getBody();
+		String html_content = email.getSingle(e).getHtml_content();
 		//File attach_file = email.getSingle(e).getAttach_file();
 		
 		if(author!=null) {
@@ -63,21 +62,37 @@ public class EffSendLastEmail extends Effect {
 					}
 					
 					//CODE
-					Properties props = new Properties();
-				    props.put("mail.smtp.host", "localhost");
-				    Session session = Session.getInstance(props, null);
+					//ConfigLoader.loadProperties("simplejavamail.properties", true); // optional default
+					//ConfigLoader.loadProperties("overrides.properties", true); // optional extra
 
-				    try {
-				        MimeMessage msg = new MimeMessage(session);
-				        msg.setFrom(author);
-				        msg.setRecipients(Message.RecipientType.TO,
-				                          receiver);
-				        msg.setSubject(object);
-				        msg.setText(body);
-				        Transport.send(msg, EffConnexion.username, EffConnexion.password);
-				    } catch (MessagingException mex) {
-				        System.out.println("send failed, exception: " + mex);
-				    }
+					String[] receiver_name1 = receiver.split("@");
+					String receiver_name = receiver_name1[0];
+					
+					String[] host1 = author.split("@");
+					String host = "smtp." + host1[1];
+					
+					Email mail = EmailBuilder.startingBlank()
+					          .to(receiver_name, receiver)
+					          .withSubject(object)
+					          .withHTMLText(html_content)
+					          .withPlainText(body)
+					          //.withEmbeddedImage("wink1", imageByteArray, "image/png")
+					          //.withEmbeddedImage("wink2", imageDatesource)
+					          //.withAttachment("invitation", pdfByteArray, "application/pdf")
+					          //.withAttachment("dresscode", odfDatasource)
+					          .withHeader("X-Priority", 5)
+					          .withReturnReceiptTo()
+					          .buildEmail();
+
+					Mailer mailer = MailerBuilder
+					          .withSMTPServer(host, 587, EffConnexion.username, EffConnexion.password)
+					          .withTransportStrategy(TransportStrategy.SMTP_TLS)
+					          .withSessionTimeout(10 * 1000)
+					          .clearEmailAddressCriteria() // turns off email validation
+					          .withDebugLogging(true)
+					          .buildMailer();
+
+					mailer.sendMail(mail);
 				   
 					
 				} else {

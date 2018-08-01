@@ -50,11 +50,12 @@ public class EmailBuilderbase {
             ScopeEmail.lastEmail.body = builder.body;
             ScopeEmail.lastEmail.object = builder.object;
             ScopeEmail.lastEmail.receiver = builder.receiver;
+            ScopeEmail.lastEmail.html_content = builder.html_content;
             ScopeEmail.lastEmail.attach_file = builder.attach_file;
         }
     }
 	
-	private String author, body, object, receiver, infos;
+	private String author, body, object, receiver, infos, html_content;
 	private File attach_file;
 	
 	public String getAuthor() {
@@ -81,6 +82,12 @@ public class EmailBuilderbase {
 	public void setReceiver(String receiver) {
 		ScopeEmail.lastEmail.receiver = receiver;
 	}
+	public String getHtml_content() {
+		return html_content;
+	}
+	public void setHtml_content(String receiver) {
+		ScopeEmail.lastEmail.html_content = html_content;
+	}
 	public File getAttach_file() {
 		return attach_file;
 	}
@@ -90,8 +97,10 @@ public class EmailBuilderbase {
 
 	public String getInfos() {
 		infos = "Author:" + ScopeEmail.lastEmail.getAuthor() + 
+				";Receiver:" + ScopeEmail.lastEmail.getReceiver() + 
 				";Body:" + ScopeEmail.lastEmail.getBody() + 
 				";Object:" + ScopeEmail.lastEmail.getObject() + 
+				";Html_content:" + ScopeEmail.lastEmail.getHtml_content() + 
 				";Attach_file:" + ScopeEmail.lastEmail.attach();
 		return infos;
 	}
