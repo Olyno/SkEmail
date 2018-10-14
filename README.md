@@ -14,3 +14,9 @@ command test:
 			set receiver of email to "myfriend@gmail.com"
 		send last email
 ```
+
+**TODO LIST:**
+
+- [x] Add posibility to use html in emails 
+- [ ] Add more services like hotmail
+- [ ] Add attach file possibility
