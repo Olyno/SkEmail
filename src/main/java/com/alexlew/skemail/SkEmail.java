@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.alexlew.skemail.util.Registration;
@@ -26,7 +25,6 @@ public class SkEmail extends JavaPlugin {
 	       } catch (IOException e) {
 	           e.printStackTrace();
 	       }
-	       Bukkit.getLogger().info("SkEmail has been enabled!");
 	   }
 	 
 	   public static SkEmail getInstance() {

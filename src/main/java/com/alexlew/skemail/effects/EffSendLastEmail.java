@@ -2,16 +2,11 @@ package com.alexlew.skemail.effects;
 
 import java.util.Properties;
 
+import ch.njol.skript.doc.Name;
 import org.bukkit.event.Event;
 
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-//import org.simplejavamail.util.ConfigLoader;
-import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import com.alexlew.skemail.types.EmailBuilderbase;
 
@@ -55,43 +50,47 @@ public class EffSendLastEmail extends Effect {
 		String receiver = email.getSingle(e).getReceiver();
 		String object = email.getSingle(e).getObject();
 		String body = email.getSingle(e).getBody();
-		//String html_content = email.getSingle(e).getHtml_content();
+		String html_content = email.getSingle(e).getHtml_content();
 		
 		if (receiver != null) {
 			if(object!=null) {
 				if(body==null) {
 					Skript.warning("It is recommended to put a content to your email");
 				}
-					
+
 				Properties props = new Properties();
-			   props.put("mail.smtp.host", "smtp.gmail.com");
-			   props.put("mail.smtp.starttls.enable", "true");
-			   props.put("mail.smtp.user", EffConnexion.username);
-			   props.put("mail.smtp.password", EffConnexion.password);
-			   props.put("mail.smtp.port", "587");
-			   props.put("mail.smtp.auth", "true");
-				   
-			   Session session = Session.getDefaultInstance(props);
-			   MimeMessage msg = new MimeMessage(session);
-			   try {
-					msg.setFrom(new InternetAddress((EffConnexion.username + "@gmail.com")));
-					//TODO Loop all adress
-					msg.addRecipient(RecipientType.TO, new InternetAddress(receiver));
-					msg.setSubject(object);
-					msg.setText(body);
-					Transport t = session.getTransport("smtp");
-					t.connect("smtp.gmail.com", EffConnexion.username, EffConnexion.password);
-					t.sendMessage(msg, msg.getAllRecipients());
-					t.close();
-					
-				   } catch (AddressException e1) {
-							e1.printStackTrace();
-						} catch (MessagingException e1) {
-							e1.printStackTrace();
-						}
-						
-			   
-			  } else {
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.socketFactory.port", "465");
+				props.put("mail.smtp.socketFactory.class",
+						"javax.net.ssl.SSLSocketFactory");
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.port", "465");
+
+				Session session = Session.getDefaultInstance(props,
+						new javax.mail.Authenticator() {
+							protected PasswordAuthentication getPasswordAuthentication() {
+								return new PasswordAuthentication(EffConnexion.username + "@gmail.com", EffConnexion.password);
+							}
+						});
+
+				try {
+
+					Message message = new MimeMessage(session);
+					message.setFrom(new InternetAddress(EffConnexion.username + "@gmail.com"));
+					message.setRecipients(Message.RecipientType.TO,
+							InternetAddress.parse(receiver));
+					message.setSubject(object);
+					message.setText(body);
+
+					Transport.send(message);
+
+				} catch (MessagingException e1) {
+					//throw new RuntimeException(e1);
+					Skript.warning("nah");
+				}
+
+
+			} else {
 				Skript.error("You must precise the object/subject of your email!");
 			}
 			

@@ -33,7 +33,7 @@ public class EffConnexion extends Effect {
 	@Override
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		user = (Expression<String>) expr[0];
-		pass = (Expression<String>) expr[0];
+		pass = (Expression<String>) expr[1];
 		return true;
 	}
 
