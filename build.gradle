@@ -1,0 +1,45 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.1"
+    }
+}
+
+group 'com.alexlew.skemail'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: "com.github.johnrengelman.shadow"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        url 'http://maven.njol.ch/repo/'
+    }
+}
+
+processResources {
+    inputs.files 'build.gradle'
+    from sourceSets.main.resources.srcDirs
+    filter(ReplaceTokens, tokens: [version: version])
+}
+
+dependencies {
+    implementation 'org.spigotmc:spigot-api:1.11-R0.1-SNAPSHOT'
+    implementation 'ch.njol:skript:2.2-SNAPSHOT'
+    compile group: 'javax.mail', name: 'mail', version: '1.4.7'
+}

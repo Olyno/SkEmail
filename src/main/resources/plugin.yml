@@ -1,0 +1,6 @@
+name: SkEmail
+description: Send email to someone!
+author: AlexLew
+version: 1.0
+main: com.alexlew.skemail.SkEmail
+depend: [Skript]
