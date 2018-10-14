@@ -1,6 +1,7 @@
 # SkEmail
-Skript addon for send emails
+Skript addon to send emails
 
+**Usage:**
 ```vb
 on skript load:
 	connexion to "myemail@gmail.com" with "my password"
