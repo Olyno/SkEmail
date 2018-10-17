@@ -19,4 +19,4 @@ command test:
 
 - [x] Add posibility to use html in emails 
 - [ ] Add more services like hotmail
-- [ ] Add attach file possibility
+- [x] Add attach file possibility
