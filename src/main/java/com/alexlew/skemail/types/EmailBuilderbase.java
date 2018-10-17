@@ -1,15 +1,16 @@
 package com.alexlew.skemail.types;
 
-import com.alexlew.skemail.effects.EffConnexion;
+import com.alexlew.skemail.effects.EffConnection;
 import com.alexlew.skemail.scopes.ScopeEmail;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
+import org.apache.commons.lang.ArrayUtils;
 
 public class EmailBuilderbase {
-	
+
 	static {
 		Classes.registerClass(new ClassInfo<EmailBuilderbase>(EmailBuilderbase.class, "emailbuilderbase")
 				.user("emailbuilderbase")
@@ -28,7 +29,7 @@ public class EmailBuilderbase {
 
 			@Override
 			public String toString(EmailBuilderbase arg0, int arg1) {
-				return EffConnexion.username;
+				return EffConnection.username;
 			}
 
 			@Override
@@ -38,7 +39,7 @@ public class EmailBuilderbase {
 		   
 		}));
 	}
-	
+
 	public EmailBuilderbase() { }
 
     public EmailBuilderbase(EmailBuilderbase builder)
@@ -47,13 +48,17 @@ public class EmailBuilderbase {
         {
             ScopeEmail.lastEmail.body = builder.body;
             ScopeEmail.lastEmail.object = builder.object;
-            ScopeEmail.lastEmail.receiver = builder.receiver;
-            ScopeEmail.lastEmail.html_content = builder.html_content;
+            ScopeEmail.lastEmail.receivers = builder.receivers;
+			ScopeEmail.lastEmail.attach_files = builder.attach_files;
         }
     }
 	
-	private String body, object, receiver, infos, html_content;
-	
+	private String body;
+	private String object;
+	private String[] receivers;
+	private String[] attach_files;
+
+
 	public String getBody() {
 		return body;
 	}
@@ -66,25 +71,93 @@ public class EmailBuilderbase {
 	public void setObject(String object) {
 		ScopeEmail.lastEmail.object = object;
 	}
-	public String getReceiver() {
-		return receiver;
-	}
-	public void setReceiver(String receiver) {
-		ScopeEmail.lastEmail.receiver = receiver;
-	}
-	public String getHtml_content() {
-		return html_content;
-	}
-	public void setHtml_content(String receiver) {
-		ScopeEmail.lastEmail.html_content = html_content;
-	}
 
 	public String getInfos() {
-		infos = "Receiver:" + ScopeEmail.lastEmail.getReceiver() + 
-				";Body:" + ScopeEmail.lastEmail.getBody() + 
-				";Object:" + ScopeEmail.lastEmail.getObject() + 
-				";Html_content:" + ScopeEmail.lastEmail.getHtml_content();
+		String infos = "Receivers:" + ScopeEmail.lastEmail.getReceivers().toString() +
+				";Body:" + ScopeEmail.lastEmail.getBody() +
+				";Object:" + ScopeEmail.lastEmail.getObject() +
+				";Attachments:" + ScopeEmail.lastEmail.getAttachments().toString();
 		return infos;
+	}
+
+	public void setAttachment(String attach_file) {
+		ScopeEmail.lastEmail.attach_files = new String[]{attach_file};
+	}
+
+	public String[] getAttachments() {
+		return attach_files;
+	}
+	public void addAttachment(String attach_file) {
+		if (ScopeEmail.lastEmail.attach_files != null) {
+			if (ScopeEmail.lastEmail.attach_files.length > 0) {
+				for (int i = 0; i < ScopeEmail.lastEmail.attach_files.length; i ++) {
+					if (ScopeEmail.lastEmail.attach_files[i] == attach_file) {
+						ScopeEmail.lastEmail.attach_files =
+								new String[]{ArrayUtils.remove(ScopeEmail.lastEmail.attach_files, i).toString()};
+						break;
+					}
+				}
+			}
+		}
+
+		ScopeEmail.lastEmail.attach_files =
+				new String[]{ArrayUtils.add(ScopeEmail.lastEmail.attach_files, attach_file).toString()};
+
+
+	}
+	public void removeAttachment(String attach_file) {
+		if (ScopeEmail.lastEmail.attach_files != null) {
+			if (ScopeEmail.lastEmail.attach_files.length > 0) {
+				for (int i = 0; i < ScopeEmail.lastEmail.attach_files.length; i ++) {
+					if (ScopeEmail.lastEmail.attach_files[i] == attach_file) {
+						ScopeEmail.lastEmail.attach_files =
+								new String[]{ArrayUtils.remove(ScopeEmail.lastEmail.attach_files, i).toString()};
+						break;
+					}
+				}
+			}
+		}
+
+
+	}
+
+	public void setReceiver(String receiver) {
+		ScopeEmail.lastEmail.receivers = new String[]{receiver};
+	}
+	public String[] getReceivers() {
+		return receivers;
+	}
+	public void addReceiver(String receiver) {
+		if (ScopeEmail.lastEmail.receivers != null) {
+			if (ScopeEmail.lastEmail.receivers.length > 0) {
+				for (int i = 0; i < ScopeEmail.lastEmail.receivers.length; i ++) {
+					if (ScopeEmail.lastEmail.receivers[i] == receiver) {
+						ScopeEmail.lastEmail.receivers =
+								new String[]{ArrayUtils.remove(ScopeEmail.lastEmail.receivers, i).toString()};
+						break;
+					}
+				}
+			}
+		}
+
+		ScopeEmail.lastEmail.receivers =
+				new String[]{ArrayUtils.add(ScopeEmail.lastEmail.receivers, receiver).toString()};
+	}
+
+	public void removeReceiver(String receiver) {
+		if (ScopeEmail.lastEmail.receivers != null) {
+			if (ScopeEmail.lastEmail.receivers.length > 0) {
+				for (int i = 0; i < ScopeEmail.lastEmail.receivers.length; i ++) {
+					if (ScopeEmail.lastEmail.receivers[i] == receiver) {
+						ScopeEmail.lastEmail.receivers =
+								new String[]{ArrayUtils.remove(ScopeEmail.lastEmail.receivers, i).toString()};
+						break;
+					}
+				}
+			}
+		}
+
+
 	}
 
 }

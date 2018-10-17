@@ -1,5 +1,6 @@
 package com.alexlew.skemail.expressions;
 
+import com.avaje.ebean.validation.Email;
 import org.bukkit.event.Event;
 
 import com.alexlew.skemail.types.EmailBuilderbase;
@@ -20,9 +21,8 @@ import ch.njol.skript.lang.ExpressionType;
 public class ExprObjectOfEmail extends SimplePropertyExpression<EmailBuilderbase, String> {
 
 	static {
-		Skript.registerExpression(ExprObjectOfEmail.class, String.class, ExpressionType.PROPERTY, 
-				"%emailbuilderbase%'s object", "object of %emailbuilderbase%",
-				"%emailbuilderbase%'s subject", "subject of %emailbuilderbase%");
+		register(ExprObjectOfEmail.class, String.class,
+				"[the] (title|subject|object)[s]", "emailbuilderbase");
 	}
 
 	@Override
