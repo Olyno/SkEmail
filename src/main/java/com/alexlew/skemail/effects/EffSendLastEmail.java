@@ -43,12 +43,15 @@ public class EffSendLastEmail extends Effect {
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		email = (Expression<EmailBuilderbase>) expr[0];
 		rec = (Expression<String>) expr[1];
+		if (email == null) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString(Event e, boolean debug) {
-		return "send " + e.toString();
+		return "send " + email.toString(e, debug);
 	}
 
 	@Override
@@ -67,24 +70,24 @@ public class EffSendLastEmail extends Effect {
 				}
 
 				Properties props = new Properties();
-				props.put("mail.smtp.host", "smtp.gmail.com");
-				props.put("mail.smtp.socketFactory.port", "465");
+				props.put("mail.smtp.host", EffConnection.smtp_address);
+				props.put("mail.smtp.socketFactory.port", EffConnection.smtp_port);
 				props.put("mail.smtp.socketFactory.class",
 						"javax.net.ssl.SSLSocketFactory");
 				props.put("mail.smtp.auth", "true");
-				props.put("mail.smtp.port", "465");
+				props.put("mail.smtp.port", EffConnection.smtp_port);
 
 				Session session = Session.getDefaultInstance(props,
 						new javax.mail.Authenticator() {
 							protected PasswordAuthentication getPasswordAuthentication() {
-								return new PasswordAuthentication(EffConnection.username + "@gmail.com", EffConnection.password);
+								return new PasswordAuthentication(EffConnection.username, EffConnection.password);
 							}
 						});
 
 				try {
 
 					Message message = new MimeMessage(session);
-					message.setFrom(new InternetAddress(EffConnection.username + "@gmail.com"));
+					message.setFrom(new InternetAddress(EffConnection.username));
 					message.setSubject(object);
 
 					BodyPart messageBodyPart = new MimeBodyPart();

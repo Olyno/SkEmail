@@ -26,41 +26,42 @@ public class ExprObjectOfEmail extends SimplePropertyExpression<EmailBuilderbase
 	}
 
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+	public String convert(EmailBuilderbase email) {
+		return email.getObject();
 	}
 
 	@Override
-	public String convert(EmailBuilderbase email) {
-		return email.getObject();
+	public Class<?>[] acceptChange(final ChangeMode mode) {
+		if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
+			return new Class[]{String.class};
+		}
+		return null;
+	}
+
+	@Override
+	public void change(Event e, Object[] delta, ChangeMode mode) {
+		for (EmailBuilderbase email : getExpr().getArray(e)) {
+			switch (mode) {
+				case SET:
+					email.setObject((String) delta[0]);
+					break;
+				case DELETE:
+					email.setObject(null);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	@Override
 	protected String getPropertyName() {
 		return "object";
 	}
-	
-	@Override
-	public void change(Event e, Object[] delta, ChangeMode mode) {
-	    for (EmailBuilderbase email : getExpr().getArray(e)) {    
-	        switch (mode) {
-	            case SET:
-	                email.setObject((String) delta[0]);
-	                break;
-	            case DELETE:
-	                email.setObject(null);
-			default:
-				break;
-	        }
-	    }
-	}
 
 	@Override
-	public Class<?>[] acceptChange(final ChangeMode mode) {
-	    if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
-	        return new Class[]{String.class};
-	    }
-	    return null;
+	public Class<? extends String> getReturnType() {
+		return String.class;
 	}
 }
 

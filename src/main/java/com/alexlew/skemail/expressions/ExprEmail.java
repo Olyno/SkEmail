@@ -43,18 +43,7 @@ public class ExprEmail extends SimpleExpression<EmailBuilderbase>{
 	}
 	
 	private boolean scope = false;
-	
-	@Override
-	public Class<? extends EmailBuilderbase> getReturnType() {
-		return EmailBuilderbase.class;
-	}
 
-	@Override
-	public boolean isSingle() {
-		return true;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		scope = EffectSection.isCurrentSection(ScopeEmail.class);
@@ -62,15 +51,25 @@ public class ExprEmail extends SimpleExpression<EmailBuilderbase>{
 	}
 
 	@Override
-	public String toString(Event e, boolean debug) {
-		return "the email";
+	protected EmailBuilderbase[] get(Event e) {
+		return new EmailBuilderbase[]{
+				scope ? ScopeEmail.lastEmail : new EmailBuilderbase()
+		};
 	}
 
 	@Override
-	protected EmailBuilderbase[] get(Event e) {
-		return new EmailBuilderbase[]{
-                scope ? ScopeEmail.lastEmail : new EmailBuilderbase()
-	};
+	public boolean isSingle() {
+		return true;
+	}
+
+	@Override
+	public Class<? extends EmailBuilderbase> getReturnType() {
+		return EmailBuilderbase.class;
+	}
+
+	@Override
+	public String toString(Event e, boolean debug) {
+		return "the email";
 	}
 }
 

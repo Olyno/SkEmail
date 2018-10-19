@@ -32,6 +32,12 @@ public class ExprReceiverOfEmail extends SimpleExpression< String> {
 	private Expression<EmailBuilderbase> email;
 
 	@Override
+	public boolean init( Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult ) {
+		email = (Expression<EmailBuilderbase>) expr[0];
+		return true;
+	}
+
+	@Override
 	protected String[] get( Event e ) {
 		EmailBuilderbase email = this.email.getSingle(e);
 		if (email == null) {
@@ -39,6 +45,36 @@ public class ExprReceiverOfEmail extends SimpleExpression< String> {
 		}
 		String[] files = email.getReceivers();
 		return files;
+	}
+
+	@Override
+	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
+		if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.DELETE) {
+			return new Class[]{String.class};
+		}
+		return null;
+	}
+
+	@Override
+	public void change(Event e, Object[] delta, ChangeMode mode) {
+		for (EmailBuilderbase email : email.getArray(e)) {
+			switch (mode) {
+				case SET:
+					email.setReceiver((String) delta[0]);
+					break;
+				case DELETE:
+					email.setReceiver(null);
+					break;
+				case ADD:
+					email.addReceiver((String) delta[0]);
+					break;
+				case REMOVE:
+					email.removeReceiver((String) delta[0]);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	@Override
@@ -55,40 +91,6 @@ public class ExprReceiverOfEmail extends SimpleExpression< String> {
 	public String toString( Event e, boolean debug ) {
 		return "receiver" + email.toString(e, debug);
 	}
-
-	@Override
-	public boolean init( Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult ) {
-		email = (Expression<EmailBuilderbase>) expr[0];
-		return true;
-	}
-
-	@Override
-	public void change(Event e, Object[] delta, ChangeMode mode) {
-		for (EmailBuilderbase email : email.getArray(e)) {
-			switch (mode) {
-				case SET:
-					email.setReceiver((String) delta[0]);
-					break;
-				case DELETE:
-					email.setReceiver(null);
-				case ADD:
-					email.addReceiver((String) delta[0]);
-				case REMOVE:
-					email.removeReceiver((String) delta[0]);
-				default:
-					break;
-			}
-		}
-	}
-
-	@Override
-	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
-		if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.DELETE) {
-			return new Class[]{String.class};
-		}
-		return null;
-	}
-
 
 }
 

@@ -37,6 +37,11 @@ public class ExprLastEmail extends SimpleExpression<EmailBuilderbase> {
     }
 
     @Override
+    public boolean isSingle() {
+        return true;
+    }
+
+    @Override
     public Class<? extends EmailBuilderbase> getReturnType() {
         return EmailBuilderbase.class;
     }
@@ -44,11 +49,6 @@ public class ExprLastEmail extends SimpleExpression<EmailBuilderbase> {
     @Override
     public String toString(Event e, boolean debug) {
         return "the last made email";
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
     }
 
 }

@@ -46,6 +46,7 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<EmailBuilderbase, 
 	                break;
 	            case DELETE:
 	                email.setBody(null);
+					break;
 			default:
 				break;
 	        }

@@ -36,10 +36,46 @@ public class ExprAttachFilesOfEmail extends SimpleExpression<String> {
     private Expression<EmailBuilderbase> email;
 
     @Override
+    public boolean init( Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult ) {
+        email = (Expression<EmailBuilderbase>) expr[0];
+        return true;
+    }
+
+    @Override
     protected String[] get( Event e ) {
         String[] attachments = email.getSingle(e).getAttachments();
         System.out.println("XX: " + Arrays.toString(attachments));
         return new String[] {Arrays.deepToString(email.getSingle(e).getAttachments())};
+    }
+
+    @Override
+    public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.DELETE) {
+            return new Class[]{String.class};
+        }
+        return null;
+    }
+
+    @Override
+    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
+        for (EmailBuilderbase email : email.getArray(e)) {
+            switch (mode) {
+                case SET:
+                    email.setAttachment((String) delta[0]);
+                    break;
+                case DELETE:
+                    email.setAttachment(null);
+                    break;
+                case ADD:
+                    email.addAttachment((String) delta[0]);
+                    break;
+                case REMOVE:
+                    email.removeAttachment((String) delta[0]);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -54,39 +90,7 @@ public class ExprAttachFilesOfEmail extends SimpleExpression<String> {
 
     @Override
     public String toString( Event e, boolean debug ) {
-        return "attach file" + email.toString(e, debug);
+        return "attach file " + email.toString(e, debug);
     }
 
-    @Override
-    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        for (EmailBuilderbase email : email.getArray(e)) {
-            switch (mode) {
-                case SET:
-                    email.setAttachment((String) delta[0]);
-                    break;
-                case DELETE:
-                    email.setAttachment(null);
-                case ADD:
-                    email.addAttachment((String) delta[0]);
-                case REMOVE:
-                    email.removeAttachment((String) delta[0]);
-                default:
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.DELETE) {
-            return new Class[]{String.class};
-        }
-        return null;
-    }
-
-    @Override
-    public boolean init( Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult ) {
-        email = (Expression<EmailBuilderbase>) expr[0];
-        return true;
-    }
 }
