@@ -14,3 +14,13 @@ command test:
 			set receiver of email to "myfriend@gmail.com"
 		send last email
 ```
+
+Mails services available:
+
+ - gmail
+ - hotmail
+ - yahoo
+ - live
+ - outlook
+ 
+ Create an issue if you want another service available!
