@@ -1,18 +1,15 @@
 package com.alexlew.skemail.effects;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 import ch.njol.skript.doc.Name;
 import org.bukkit.event.Event;
 
-import javax.activation.DataHandler;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import com.alexlew.skemail.types.EmailBuilderbase;
+import com.alexlew.skemail.types.EmailCreator;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
@@ -21,27 +18,27 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Name("Send EmailBuilderbase")
+@Name("Send EmailCreator")
 @Description("Send the email")
 @Examples({
-			"send last email"
-	})
+		"send last email"
+})
 @Since("1.0")
 
 public class EffSendLastEmail extends Effect {
 
 	static {
 		Skript.registerEffect(EffSendLastEmail.class,
-				          "send %emailbuilderbase%[ to %-string%]");
+				"send %emailcreator% [to %-string%]");
 	}
-	
-	private Expression<EmailBuilderbase> email;
+
+	private Expression<EmailCreator> email;
 	private Expression<String> rec;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
-		email = (Expression<EmailBuilderbase>) expr[0];
+		email = (Expression<EmailCreator>) expr[0];
 		rec = (Expression<String>) expr[1];
 		if (email == null) {
 			return false;
@@ -61,8 +58,6 @@ public class EffSendLastEmail extends Effect {
 		String body = email.getSingle(e).getBody();
 		String[] attach_files = email.getSingle(e).getAttachments();
 
-		System.out.println("Receivers: " + receivers);
-		System.out.println("Attached files: " + attach_files);
 		if (receivers != null) {
 			if(object!=null) {
 				if(body==null) {
@@ -103,7 +98,7 @@ public class EffSendLastEmail extends Effect {
 							try {
 								attachPart.attachFile(filePath);
 							} catch (IOException e1) {
-								Skript.error("The file path of file (" + filePath + ") doesn't exist or is bad.");
+								Skript.error("[SkEmail] The file path of file (" + filePath + ") doesn't exist or is bad.");
 								//e1.printStackTrace();
 							}
 
@@ -117,7 +112,7 @@ public class EffSendLastEmail extends Effect {
 								message.addRecipients(Message.RecipientType.TO,
 										InternetAddress.parse(receiver));
 							} else {
-								Skript.warning("This receiver is not valid: " + receiver);
+								Skript.warning("[SkEmail] This receiver is not valid: " + receiver);
 							}
 
 						}
@@ -129,18 +124,18 @@ public class EffSendLastEmail extends Effect {
 					Transport.send(message);
 
 				} catch (MessagingException e1) {
-					Skript.warning("Error...");
+					Skript.error("[SkEmail] An error occurred due to a wrong code :(");
 				}
 
 
 			} else {
-				Skript.error("You must precise the object/subject of your email!");
+				Skript.error("[SkEmail] You must precise the object/subject of your email!");
 			}
-			
+
 		} else {
-			Skript.error("You must precise the mail which will receive your email!");
-		
+			Skript.error("[SkEmail] You must precise the mail which will receive your email!");
+
 		}
-}
+	}
 
 }

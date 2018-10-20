@@ -10,42 +10,42 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailBuilderbase;
+import com.alexlew.skemail.types.EmailCreator;
 import com.alexlew.skemail.util.EffectSection;
 
 @Name("Scope Email")
 @Description("Scope for mail")
 @Examples({
-			"make new email:",
-			"\tset author of email to \"myemail@gmail.com\"",
-			"\tset receiver of email to \"receiver@gmail.com\"",
-			"\tset object of email to \"Welcome\"",
-			"\tset body of email to \"Welcome on my new server!\"",
-			"\tset attach file of email to \"plugin/Test/myfile.txt\""
-	})
+		"make new email:",
+		"\tset author of email to \"myemail@gmail.com\"",
+		"\tset receiver of email to \"receiver@gmail.com\"",
+		"\tset object of email to \"Welcome\"",
+		"\tset body of email to \"Welcome on my new server!\"",
+		"\tset attach file of email to \"plugin/Test/myfile.txt\""
+})
 @Since("1.0")
 
 public class ScopeEmail extends EffectSection {
-	
-	public static EmailBuilderbase lastEmail;
-	
+
+	public static EmailCreator lastEmailCreator;
+
 	static {
-		Skript.registerCondition(ScopeEmail.class, 
-				"(make|do|create) [new] ([e]mail|[e]mail %-emailbuilderbase%)");
+		Skript.registerCondition(ScopeEmail.class,
+				"(make|do|create) [new] ([e]mail|[e]mail %-emailcreator%)");
 	}
 
-	private Expression<EmailBuilderbase> builder;
-	
+	private Expression<EmailCreator> builder;
+
 	@Override
 	public void execute(Event e) {
-		EmailBuilderbase email = builder == null ? new EmailBuilderbase() : builder.getSingle(e);
-        lastEmail = email == null ? new EmailBuilderbase() : email;
+		EmailCreator email = builder == null ? new EmailCreator() : builder.getSingle(e);
+		lastEmailCreator = email == null ? new EmailCreator() : email;
 		runSection(e);
 	}
 
 	@Override
 	public String toString(Event e, boolean debug) {
-		return "make new email " + lastEmail.toString();
+		return "make new email " + lastEmailCreator.toString();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -57,7 +57,7 @@ public class ScopeEmail extends EffectSection {
 			Skript.error("An email creation scope is useless without any content!");
 			return false;
 		}
-		builder = (Expression<EmailBuilderbase>) exprs[0];
+		builder = (Expression<EmailCreator>) exprs[0];
 		loadSection(true);
 		return true;
 	}
