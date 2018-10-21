@@ -1,6 +1,8 @@
 # SkEmail
 Skript addon to send emails
 
+First all, configure your gmail account to allow SkEmail to send mails: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail
+
 **Usage:**
 ```vb
 on load:
