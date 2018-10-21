@@ -3,8 +3,8 @@ Skript addon to send emails
 
 **Usage:**
 ```vb
-on skript load:
-	connexion to "myemail@gmail.com" with "my password"
+on load:
+	connection to "myemail@gmail.com" with "my password"
 
 command test:
 	trigger:
