@@ -6,7 +6,7 @@ First all, configure your gmail account to allow SkEmail to send mails: https://
 **Usage SkEmail <= 1.1:**
 ```vb
 on load:
-	connection to "myemail@gmail.com" with "my password"
+	connect to "myemail@gmail.com" with "my password"
 
 command send:
 	trigger:
@@ -19,7 +19,7 @@ command send:
 **Usage SkEmail 1.2+:**
 ```vb
 on load:
-	connection to mails
+	connect to mails
 
 command send:
 	trigger:
