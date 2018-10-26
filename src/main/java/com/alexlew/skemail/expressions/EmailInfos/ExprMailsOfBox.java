@@ -1,6 +1,7 @@
 package com.alexlew.skemail.expressions.EmailInfos;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -10,14 +11,24 @@ import com.alexlew.skemail.effects.EffConnection;
 import org.bukkit.event.Event;
 
 import javax.mail.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 
-public class ExprMailsOfBox extends SimpleExpression<String> {
+@Name("Mails of Box")
+@Description("Returns mails of a specific box.")
+@Examples({
+        "set {_mails::*} to last 5 mails"
+})
+@Since("1.2")
+
+public class ExprMailsOfBox extends SimpleExpression<Message> {
 
     static {
-        Skript.registerExpression(ExprMailsOfBox.class, String.class, ExpressionType.COMBINED,
-                "last[ly] %integer% [e]mails (from|in) [box] %string%");
+        Skript.registerExpression(ExprMailsOfBox.class, Message.class, ExpressionType.COMBINED,
+                "[the] last[ly] [%-integer%] [e]mails [(in|from) [the] [box] [(named|with name)] %-string%]");
     }
 
     private Expression<String> box;
@@ -31,48 +42,53 @@ public class ExprMailsOfBox extends SimpleExpression<String> {
     }
 
     @Override
-    protected String[] get( Event e ) {
-        String box_name = box.getSingle(e);
+    protected Message[] get( Event e ) {
+        String box_name = box == null ? "INBOX" : box.getSingle(e);
+        Integer nbr_times = box == null ? 0 : nbr.getSingle(e);
+
         try {
             Properties properties = new Properties();
-
-            properties.put("mail.pop3.host", EffConnection.pop_address);
-            properties.put("mail.pop3.port", EffConnection.pop_port);
-            properties.put("mail.pop3.starttls.enable", "true");
             Session emailSession = Session.getDefaultInstance(properties);
+            Store store = emailSession.getStore("imaps");
 
-            Store store = emailSession.getStore("pop3s");
-
-            store.connect(EffConnection.pop_address, EffConnection.username, EffConnection.password);
+            store.connect(EffConnection.imap_address, EffConnection.username, EffConnection.password);
 
             Folder emailFolder = store.getFolder(box_name);
             emailFolder.open(Folder.READ_ONLY);
 
             Message[] messages = emailFolder.getMessages();
-            System.out.println("messages.length---" + messages.length);
 
-            for (int i = 0, n = messages.length; i < n; i++) {
-                Message message = messages[i];
-                System.out.println("---------------------------------");
-                System.out.println("Email Number " + (i + 1));
-                System.out.println("Subject: " + message.getSubject());
-                System.out.println("From: " + message.getFrom()[0]);
-                System.out.println("Text: " + message.getContent().toString());
+            List<Message> mailsList = new ArrayList<Message>(Arrays.asList(messages));
 
+            if (nbr_times < 0 || nbr_times == 0) {
+                nbr_times = messages.length;
             }
 
-            //close the store and folder objects
-            emailFolder.close(false);
-            store.close();
+            for (int i = 0; i < nbr_times; i++) {
+                 mailsList.add(messages[i]);
+                 if(nbr_times - 1 == i) {
+                      ExprLastEmailRead.lastEmailRead = messages[i];
+                  }
+            }
+
+            Message[] mailsReader = mailsList.toArray(new Message[0]);
+            //emailFolder.close(false);
+            //store.close();
+            return mailsReader;
 
         } catch (NoSuchProviderException e1) {
+            System.out.println("WAIT1");
             e1.printStackTrace();
         } catch (MessagingException e1) {
+            System.out.println("WAIT2");
             e1.printStackTrace();
         } catch (Exception e1) {
+            System.out.println("WAIT3");
             e1.printStackTrace();
         }
-        return new String[0];
+
+        return null;
+
     }
 
     @Override
@@ -81,12 +97,12 @@ public class ExprMailsOfBox extends SimpleExpression<String> {
     }
 
     @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
+    public Class<? extends Message> getReturnType() {
+        return Message.class;
     }
 
     @Override
     public String toString( Event e, boolean debug ) {
-        return "box " + box.toString(e, debug);
+        return "lastly " + nbr.toString(e, debug) + " in box " + box.toString(e, debug);
     }
 }

@@ -7,10 +7,7 @@ import com.alexlew.skemail.types.EmailCreator;
 import com.alexlew.skemail.util.EffectSection;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -31,6 +28,7 @@ import ch.njol.util.Kleenean;
 		"\tset object of email to \"TEST\"",
 		"\tset body of email to \"Hey! That's a test!\"",
 		"\tset receiver of email to \"hey@gmailcom\"",
+		"\tadd \"plugins/myfile.txt\" to attachments of email",
 		"set {_email} to last email"
 })
 @Since("1.0")

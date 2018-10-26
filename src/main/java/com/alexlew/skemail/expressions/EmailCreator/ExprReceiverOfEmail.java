@@ -25,7 +25,7 @@ public class ExprReceiverOfEmail extends SimpleExpression<String> {
 
 	static {
 		Skript.registerExpression(ExprReceiverOfEmail.class, String.class, ExpressionType.SIMPLE,
-				"[the] %emailcreator%['s] receiver[s]",
+				"%emailcreator%['s] receiver[s]",
 				"receiver[s] of %emailcreator%");
 	}
 
@@ -89,7 +89,7 @@ public class ExprReceiverOfEmail extends SimpleExpression<String> {
 
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "receiver" + email.toString(e, debug);
+		return "receiver " + email.toString(e, debug);
 	}
 
 }

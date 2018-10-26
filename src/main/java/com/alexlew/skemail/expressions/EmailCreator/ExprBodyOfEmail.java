@@ -19,12 +19,7 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<EmailCreator, Stri
 
 	static {
 		register(ExprBodyOfEmail.class, String.class,
-				"[the] (body|content)", "emailcreator");
-	}
-
-	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+				"(body|content)", "emailcreator");
 	}
 
 	@Override
@@ -33,8 +28,11 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<EmailCreator, Stri
 	}
 
 	@Override
-	protected String getPropertyName() {
-		return "body";
+	public Class<?>[] acceptChange(final ChangeMode mode) {
+		if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
+			return new Class[]{String.class};
+		}
+		return null;
 	}
 
 	@Override
@@ -54,11 +52,13 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<EmailCreator, Stri
 	}
 
 	@Override
-	public Class<?>[] acceptChange(final ChangeMode mode) {
-		if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
-			return new Class[]{String.class};
-		}
-		return null;
+	protected String getPropertyName() {
+		return "body";
+	}
+
+	@Override
+	public Class<? extends String> getReturnType() {
+		return String.class;
 	}
 }
 

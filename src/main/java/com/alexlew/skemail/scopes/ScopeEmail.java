@@ -31,15 +31,12 @@ public class ScopeEmail extends EffectSection {
 
 	static {
 		Skript.registerCondition(ScopeEmail.class,
-				"(make|do|create) [new] ([e]mail|[e]mail %-emailcreator%)");
+				"(make|do|create) [new] [e]mail");
 	}
-
-	private Expression<EmailCreator> builder;
 
 	@Override
 	public void execute(Event e) {
-		EmailCreator email = builder == null ? new EmailCreator() : builder.getSingle(e);
-		lastEmailCreator = email == null ? new EmailCreator() : email;
+		lastEmailCreator = new EmailCreator();
 		runSection(e);
 	}
 
@@ -50,14 +47,13 @@ public class ScopeEmail extends EffectSection {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean init(Expression<?>[] exprs, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
 		if (checkIfCondition())
 			return false;
 		if (!hasSection()) {
 			Skript.error("An email creation scope is useless without any content!");
 			return false;
 		}
-		builder = (Expression<EmailCreator>) exprs[0];
 		loadSection(true);
 		return true;
 	}

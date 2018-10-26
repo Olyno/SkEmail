@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 @Description("Returns attach files of an email. Can be set in a email scope")
 @Examples({
         "make new email:",
-        "\tset attachement of email to \"plugin/myfile.txt\""
+        "\tset attachment of email to \"plugin/myfile.txt\""
 })
 @Since("1.1")
 
@@ -24,7 +24,7 @@ public class ExprAttachFilesOfEmail extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprAttachFilesOfEmail.class, String.class, ExpressionType.COMBINED,
-                "[the] %emailcreator%['s] (attached file|attachment)[s]",
+                "%emailcreator%['s] (attached file|attachment)[s]",
                 "(attached file|attachment)[s] of %emailcreator%");
     }
 

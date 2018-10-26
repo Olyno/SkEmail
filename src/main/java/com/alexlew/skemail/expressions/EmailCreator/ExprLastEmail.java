@@ -23,7 +23,7 @@ public class ExprLastEmail extends SimpleExpression<EmailCreator> {
 
     static {
         Skript.registerExpression(ExprLastEmail.class, EmailCreator.class, ExpressionType.SIMPLE,
-                "[the] last[ly] [(made|created|did)] email[[ ](creator|build[er])]");
+                "[the] last[ly] [(made|created|did)] [e]mail[[ ](creator|build[er])]");
     }
 
     @Override

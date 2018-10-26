@@ -4,15 +4,17 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.skript.util.Date;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
 
 public class EmailReader {
 
     static {
-        Classes.registerClass(new ClassInfo<EmailReader>(EmailReader.class, "emailreader")
+        Classes.registerClass(new ClassInfo<Message>(Message.class, "emailreader")
                 .user("emailreader")
                 .name("emailreader")
-                .parser(new Parser<EmailReader>() {
+                .parser(new Parser<Message>() {
 
                     @Override
                     public String getVariableNamePattern() {
@@ -20,67 +22,60 @@ public class EmailReader {
                     }
 
                     @Override
-                    public EmailReader parse(String arg0, ParseContext arg1) {
+                    public Message parse( String arg0, ParseContext arg1) {
                         return null;
                     }
 
                     @Override
-                    public String toString(EmailReader arg0, int arg1) {
-                        return lastEmailReader.object;
+                    public String toString( Message arg0, int arg1) {
+                        return null;
                     }
 
                     @Override
-                    public String toVariableNameString(EmailReader arg0) {
+                    public String toVariableNameString( Message arg0) {
                         return null;
                     }
 
                 }));
     }
 
-    public EmailReader() { }
+    /*public EmailReader() { }
 
-    public EmailReader(EmailReader builder)
+    public EmailReader( Message builder )
     {
         if (builder != null)
         {
-            lastEmailReader.body = builder.body;
-            lastEmailReader.author = builder.author;
-            lastEmailReader.object = builder.object;
-            lastEmailReader.sent_date = builder.sent_date;
-            lastEmailReader.receivers = builder.receivers;
-            lastEmailReader.attach_files = builder.attach_files;
+            try {
+                this.body = builder.getContent().toString();
+                this.subject = builder.getSubject();
+                ToStringSubject = builder.getSubject();
+                this.sender = builder.getFrom().toString();
+                for (int i = 0; 0 + 1 < builder.getAllRecipients().length; i++) {
+                    this.receivers[i] = builder.getAllRecipients()[i].toString();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private String body;
-    private String author;
-    private String object;
-    private Date sent_date;
+    private String subject;
+    private String sender;
     private String[] receivers;
-    private String[] attach_files;
-
-    public static EmailReader lastEmailReader;
-
 
     public String getBody() {
         return body;
     }
-    public String getAuthor() {
-        return author;
+    public String getSubject() {
+        return subject;
     }
-    public String getObject() {
-        return object;
-    }
-
-    public String getInfos() {
-        String infos = "Receivers:" + lastEmailReader.getReceivers().toString();
-        return infos;
-    }
-    public String[] getAttachments() {
-        return attach_files;
+    public String getSender() {
+        return sender;
     }
     public String[] getReceivers() {
         return receivers;
-    }
-
+    }*/
 }

@@ -8,6 +8,16 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 @Name("Connexion")
 @Description("Connect to your email account. Current address available: hotmail, yahoo, gmail, live and outlook.")
@@ -20,7 +30,7 @@ public class EffConnection extends Effect {
 
     static {
         Skript.registerEffect(EffConnection.class,
-                "(connexion|connection|login|connect) to [user] [(named|with name)] %string% (and|with) [pass[word]] %string%");
+                "(connexion|connection|login|connect) to [[sk]e]mail[s]");
     }
 
     public static String username;
@@ -28,32 +38,41 @@ public class EffConnection extends Effect {
 
     public static String smtp_port;
     public static String smtp_address;
-    public static String pop_port;
-    public static String pop_address;
-
-    private Expression<String> user;
-    private Expression<String> pass;
-    boolean bad = false;
+    public static String imap_port;
+    public static String imap_address;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
-        user = (Expression<String>) expr[0];
-        pass = (Expression<String>) expr[1];
-        if(user == null || pass == null) {
-            return false;
-        }
         return true;
     }
 
     @Override
-    public String toString(Event e, boolean debug) {
-        return "connection to user " + user.toString(e, debug) + " and password " + pass.toString(e, debug);
-    }
-
-    @Override
     protected void execute(Event e) {
-        username = user.getSingle(e);
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser
+                    .parse(new FileReader("plugins/SkEmail/config.json"));
+            JSONObject jsonObject = (JSONObject)object;
+
+            username = (String) jsonObject.get("login");
+            password = (String) jsonObject.get("password");
+            smtp_address = (String) jsonObject.get("smtp_address");
+            smtp_port = (String) jsonObject.get("smtp_port");
+            imap_address = (String) jsonObject.get("imap_address");
+            imap_port = (String) jsonObject.get("imap_port");
+
+            System.out.println("[SkEmail] Mail account connected!");
+
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        } catch (FileNotFoundException e1) {
+            System.out.println("[SkEmail] Configuration's file not found.");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        /*username = user.getSingle(e);
         password = pass.getSingle(e);
         if (username.contains("@")) {
             String[] s_address1 = username.split("@");
@@ -79,14 +98,19 @@ public class EffConnection extends Effect {
             }
 
             if (bad == false) {
-                System.out.print("Connection established!");
+                System.out.print("[SkEmail] Connection established!");
             }
 
 
         } else {
             Skript.error("[SkEmail] Your connection's name must to be an address mail like myaddress@gmail.com and not " + username);
-        }
+        }*/
 
 
+    }
+
+    @Override
+    public String toString(Event e, boolean debug) {
+        return "connection to mail " + username + " and password " + password;
     }
 }
