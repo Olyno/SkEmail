@@ -35,12 +35,7 @@ command read:
 		set {_mails::*} to last 2 mails
 		broadcast author of {_mails::1}
 ```
-Mails services available:
 
- - gmail
- - hotmail
- - yahoo
- - live
- - outlook
+All mails services are available. To change it, configure the file "plugins/SkEmail/config.json"
  
  Create an issue if you want another service available!
