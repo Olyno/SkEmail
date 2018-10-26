@@ -37,5 +37,3 @@ command read:
 ```
 
 All mails services are available. To change it, configure the file "plugins/SkEmail/config.json"
- 
- Create an issue if you want another service available!
