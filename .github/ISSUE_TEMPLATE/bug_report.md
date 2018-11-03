@@ -16,7 +16,11 @@ I'm using SkEmail version [your skemail version] (do ``/ver skemail`` in your co
 
 **About the issue:**
 
-I got a [java|skript] error.
+I got a [java|skript] error:
+```vb
+[put your error here]
+```
+
 My code is:
 ```vb
 [put your code here]
