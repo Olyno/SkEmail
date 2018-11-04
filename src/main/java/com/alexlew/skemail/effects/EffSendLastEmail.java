@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import ch.njol.skript.doc.Name;
+import com.alexlew.skemail.types.EmailConnection;
+import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 
 import javax.mail.*;
@@ -29,34 +31,34 @@ public class EffSendLastEmail extends Effect {
 
 	static {
 		Skript.registerEffect(EffSendLastEmail.class,
-				"send %emailcreator% [to %-string%]");
+				"send %emailcreator% [to %-string%] [using %-emailconnection%]");
 	}
 
 	private Expression<EmailCreator> email;
 	private Expression<String> rec;
+	private Expression<EmailConnection> connection;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		email = (Expression<EmailCreator>) expr[0];
 		rec = (Expression<String>) expr[1];
-		if (email == null) {
-			return false;
+		if (expr[2] instanceof EmailConnection)	{
+			connection = (Expression<EmailConnection>) expr[2];
 		}
+
 		return true;
 	}
 
 	@Override
-	public String toString(Event e, boolean debug) {
-		return "send " + email.toString(e, debug);
-	}
-
-	@Override
 	protected void execute(Event e) {
-		String[] receivers = email.getSingle(e).getReceivers();
+		String[] receivers = rec == null ? email.getSingle(e).getReceivers() : new String[] {rec.getSingle(e)};
+		EmailConnection connect = connection == null ? EffConnection.lastEmailConnection : connection.getSingle(e);
 		String object = email.getSingle(e).getObject();
 		String body = email.getSingle(e).getBody();
 		String[] attach_files = email.getSingle(e).getAttachments();
+		String username = connect.getUsername();
+        String password = connect.getPassword();
+        EmailService service = connect.getService();
 
 		if (receivers != null) {
 			if(object!=null) {
@@ -66,24 +68,24 @@ public class EffSendLastEmail extends Effect {
 					body = body.replace("%newline%", "<br>");
 
 					Properties props = new Properties();
-					props.put("mail.smtp.host", EffConnection.smtp_address);
-					props.put("mail.smtp.socketFactory.port", EffConnection.smtp_port);
+					props.put("mail.smtp.host", service.getSmtp_address());
+					props.put("mail.smtp.socketFactory.port", service.getSmtp_port());
 					props.put("mail.smtp.socketFactory.class",
 							"javax.net.ssl.SSLSocketFactory");
 					props.put("mail.smtp.auth", "true");
-					props.put("mail.smtp.port", EffConnection.smtp_port);
+					props.put("mail.smtp.port", service.getSmtp_port());
 
 					Session session = Session.getDefaultInstance(props,
 							new javax.mail.Authenticator() {
 								protected PasswordAuthentication getPasswordAuthentication() {
-									return new PasswordAuthentication(EffConnection.username, EffConnection.password);
+									return new PasswordAuthentication(username, password);
 								}
 							});
 
 					try {
 
 						Message message = new MimeMessage(session);
-						message.setFrom(new InternetAddress(EffConnection.username));
+						message.setFrom(new InternetAddress(password));
 						message.setSubject(object);
 
 						BodyPart messageBodyPart = new MimeBodyPart();
@@ -141,6 +143,11 @@ public class EffSendLastEmail extends Effect {
 			System.out.println("[SkEmail] You must precise the mail which will receive your email!");
 
 		}
+	}
+
+	@Override
+	public String toString(Event e, boolean debug) {
+		return "send " + email.toString(e, debug);
 	}
 
 }

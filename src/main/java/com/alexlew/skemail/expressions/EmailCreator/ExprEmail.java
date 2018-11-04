@@ -2,7 +2,7 @@ package com.alexlew.skemail.expressions.EmailCreator;
 
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.scopes.ScopeEmail;
+import com.alexlew.skemail.scopes.ScopeEmailCreator;
 import com.alexlew.skemail.types.EmailCreator;
 import com.alexlew.skemail.util.EffectSection;
 
@@ -37,21 +37,21 @@ public class ExprEmail extends SimpleExpression<EmailCreator>{
 
 	static {
 		Skript.registerExpression(ExprEmail.class, EmailCreator.class, ExpressionType.SIMPLE,
-				"[(the|an|[a] new)] email");
+				"[(the|an|[a] new)] [e]mail [(creator|build[er])]");
 	}
 
 	private boolean scope = false;
 
 	@Override
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
-		scope = EffectSection.isCurrentSection(ScopeEmail.class);
+		scope = EffectSection.isCurrentSection(ScopeEmailCreator.class);
 		return scope;
 	}
 
 	@Override
 	protected EmailCreator[] get(Event e) {
 		return new EmailCreator[]{
-				scope ? ScopeEmail.lastEmailCreator : new EmailCreator()
+				scope ? ScopeEmailCreator.lastEmailCreator : new EmailCreator()
 		};
 	}
 

@@ -1,16 +1,18 @@
-package com.alexlew.skemail.expressions.EmailCreator;
+package com.alexlew.skemail.expressions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import com.alexlew.skemail.effects.EffConnection;
+import com.alexlew.skemail.types.EmailConnection;
 import org.bukkit.event.Event;
-
-import com.alexlew.skemail.types.EmailCreator;
-import com.alexlew.skemail.scopes.ScopeEmailCreator;
 
 @Name("Last Email")
 @Description("Returns the email that was last made in a email scope")
@@ -19,11 +21,11 @@ import com.alexlew.skemail.scopes.ScopeEmailCreator;
 })
 @Since("1.0")
 
-public class ExprLastEmail extends SimpleExpression<EmailCreator> {
+public class ExprLastConnection extends SimpleExpression<EmailConnection> {
 
     static {
-        Skript.registerExpression(ExprLastEmail.class, EmailCreator.class, ExpressionType.SIMPLE,
-                "[the] last[ly] [(made|created|did)] [e]mail[[ ](creator|build[er])]");
+        Skript.registerExpression(ExprLastConnection.class, EmailConnection.class, ExpressionType.SIMPLE,
+                "[the] last[ly] [(account|session)] connect[ion]");
     }
 
     @Override
@@ -32,8 +34,8 @@ public class ExprLastEmail extends SimpleExpression<EmailCreator> {
     }
 
     @Override
-    protected EmailCreator[] get(Event e) {
-        return new EmailCreator[]{ScopeEmailCreator.lastEmailCreator};
+    protected EmailConnection[] get( Event e) {
+        return new EmailConnection[]{EffConnection.lastEmailConnection};
     }
 
     @Override
@@ -42,13 +44,13 @@ public class ExprLastEmail extends SimpleExpression<EmailCreator> {
     }
 
     @Override
-    public Class<? extends EmailCreator> getReturnType() {
-        return EmailCreator.class;
+    public Class<? extends EmailConnection> getReturnType() {
+        return EmailConnection.class;
     }
 
     @Override
     public String toString(Event e, boolean debug) {
-        return "the last made email";
+        return "the last connection";
     }
 
 }

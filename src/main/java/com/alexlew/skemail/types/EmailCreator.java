@@ -1,7 +1,6 @@
 package com.alexlew.skemail.types;
 
-import com.alexlew.skemail.effects.EffConnection;
-import com.alexlew.skemail.scopes.ScopeEmail;
+import com.alexlew.skemail.scopes.ScopeEmailCreator;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
@@ -32,7 +31,7 @@ public class EmailCreator {
 
                     @Override
                     public String toString(EmailCreator arg0, int arg1) {
-                        return EffConnection.username;
+                        return null;
                     }
 
                     @Override
@@ -49,10 +48,10 @@ public class EmailCreator {
     {
         if (builder != null)
         {
-            ScopeEmail.lastEmailCreator.body = builder.body;
-            ScopeEmail.lastEmailCreator.object = builder.object;
-            ScopeEmail.lastEmailCreator.receivers = builder.receivers;
-            ScopeEmail.lastEmailCreator.attach_files = builder.attach_files;
+            ScopeEmailCreator.lastEmailCreator.body = builder.body;
+            ScopeEmailCreator.lastEmailCreator.object = builder.object;
+            ScopeEmailCreator.lastEmailCreator.receivers = builder.receivers;
+            ScopeEmailCreator.lastEmailCreator.attach_files = builder.attach_files;
         }
     }
 
@@ -66,35 +65,35 @@ public class EmailCreator {
         return body;
     }
     public void setBody(String body) {
-        ScopeEmail.lastEmailCreator.body = body;
+        ScopeEmailCreator.lastEmailCreator.body = body;
     }
     public String getObject() {
         return object;
     }
     public void setObject(String object) {
-        ScopeEmail.lastEmailCreator.object = object;
+        ScopeEmailCreator.lastEmailCreator.object = object;
     }
 
     public String getInfos() {
-        String infos = "Receivers:" + ScopeEmail.lastEmailCreator.getReceivers().toString() +
-                ";Body:" + ScopeEmail.lastEmailCreator.getBody() +
-                ";Object:" + ScopeEmail.lastEmailCreator.getObject() +
-                ";Attachments:" + ScopeEmail.lastEmailCreator.getAttachments().toString();
+        String infos = "Receivers:" + ScopeEmailCreator.lastEmailCreator.getReceivers().toString() +
+                ";Body:" + ScopeEmailCreator.lastEmailCreator.getBody() +
+                ";Object:" + ScopeEmailCreator.lastEmailCreator.getObject() +
+                ";Attachments:" + ScopeEmailCreator.lastEmailCreator.getAttachments().toString();
         return infos;
     }
 
     public void setAttachment(String attach_file) {
-        ScopeEmail.lastEmailCreator.attach_files = new String[]{attach_file};
+        ScopeEmailCreator.lastEmailCreator.attach_files = new String[]{attach_file};
     }
 
     public String[] getAttachments() {
         return attach_files;
     }
     public void addAttachment(String attach_file) {
-        if (ScopeEmail.lastEmailCreator.attach_files != null) {
+        if (ScopeEmailCreator.lastEmailCreator.attach_files != null) {
             String[] str_array = attach_files;
             List<String> list = new ArrayList<String>(Arrays.asList(str_array));
-            if (ScopeEmail.lastEmailCreator.attach_files.length > 0) {
+            if (ScopeEmailCreator.lastEmailCreator.attach_files.length > 0) {
                 list.remove(attach_file);
             }
             list.add(attach_file);
@@ -107,8 +106,8 @@ public class EmailCreator {
 
     }
     public void removeAttachment(String attach_file) {
-        if (ScopeEmail.lastEmailCreator.attach_files != null) {
-            if (ScopeEmail.lastEmailCreator.attach_files.length > 0) {
+        if (ScopeEmailCreator.lastEmailCreator.attach_files != null) {
+            if (ScopeEmailCreator.lastEmailCreator.attach_files.length > 0) {
                 String[] str_array = attach_files;
                 List<String> list = new ArrayList<String>(Arrays.asList(str_array));
                 list.remove(attach_file);
@@ -120,16 +119,16 @@ public class EmailCreator {
     }
 
     public void setReceiver(String receiver) {
-        ScopeEmail.lastEmailCreator.receivers = new String[]{receiver};
+        ScopeEmailCreator.lastEmailCreator.receivers = new String[]{receiver};
     }
     public String[] getReceivers() {
         return receivers;
     }
     public void addReceiver(String receiver) {
-        if (ScopeEmail.lastEmailCreator.receivers != null) {
+        if (ScopeEmailCreator.lastEmailCreator.receivers != null) {
             String[] str_array = receivers;
             List<String> list = new ArrayList<>(Arrays.asList(str_array));
-            if (ScopeEmail.lastEmailCreator.receivers.length > 0) {
+            if (ScopeEmailCreator.lastEmailCreator.receivers.length > 0) {
                 list.remove(receiver);list.add(receiver);
             }
             list.add(receiver);
@@ -141,8 +140,8 @@ public class EmailCreator {
     }
 
     public void removeReceiver(String receiver) {
-        if (ScopeEmail.lastEmailCreator.receivers != null) {
-            if (ScopeEmail.lastEmailCreator.receivers.length > 0) {
+        if (ScopeEmailCreator.lastEmailCreator.receivers != null) {
+            if (ScopeEmailCreator.lastEmailCreator.receivers.length > 0) {
                 String[] str_array = receivers;
                 List<String> list = new ArrayList<String>(Arrays.asList(str_array));
                 list.remove(receiver);
