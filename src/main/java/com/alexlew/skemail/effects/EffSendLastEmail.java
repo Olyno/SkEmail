@@ -1,9 +1,10 @@
 package com.alexlew.skemail.effects;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-import ch.njol.skript.doc.Name;
+import com.alexlew.skemail.SkEmail;
 import com.alexlew.skemail.types.EmailConnection;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
@@ -55,10 +56,11 @@ public class EffSendLastEmail extends Effect {
 		EmailConnection connect = connection == null ? EffConnection.lastEmailConnection : connection.getSingle(e);
 		String object = email.getSingle(e).getObject();
 		String body = email.getSingle(e).getBody();
+		String author = email.getSingle(e).getAuthor();
 		String[] attach_files = email.getSingle(e).getAttachments();
 		String username = connect.getUsername();
-        String password = connect.getPassword();
-        EmailService service = connect.getService();
+		String password = connect.getPassword();
+		EmailService service = connect.getService();
 
 		if (receivers != null) {
 			if(object!=null) {
@@ -85,7 +87,11 @@ public class EffSendLastEmail extends Effect {
 					try {
 
 						Message message = new MimeMessage(session);
-						message.setFrom(new InternetAddress(password));
+						if (author != null) {
+							message.setFrom(new InternetAddress(username, author));
+						} else {
+							message.setFrom(new InternetAddress(username));
+						}
 						message.setSubject(object);
 
 						BodyPart messageBodyPart = new MimeBodyPart();
@@ -101,7 +107,7 @@ public class EffSendLastEmail extends Effect {
 								try {
 									attachPart.attachFile(filePath);
 								} catch (IOException e1) {
-									System.out.println("[SkEmail] The file path of file (" + filePath + ") doesn't exist or is bad.");
+									SkEmail.error("Ahe file path of file (" + filePath + ") doesn't exist or is bad.");
 									//e1.printStackTrace();
 								}
 
@@ -127,20 +133,23 @@ public class EffSendLastEmail extends Effect {
 						Transport.send(message);
 
 					} catch (MessagingException e1) {
-						System.out.println("[SkEmail] An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
+						SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail \nIf the problem persists, try to reload your server.");
 						e1.printStackTrace();
+					} catch (UnsupportedEncodingException e1) {
+						SkEmail.error("Ane or more characters are not supported in your name. Try to use ASCII format for the author's name.");
+						//e1.printStackTrace();
 					}
 
 				} else {
-					System.out.println("[SkEmail] You must add content in your email!");
+					SkEmail.error("Aou must add content in your email!");
 				}
 
 			} else {
-				System.out.println("[SkEmail] You must precise the object/subject of your email!");
+				SkEmail.error("Aou must precise the object/subject of your email!");
 			}
 
 		} else {
-			System.out.println("[SkEmail] You must precise the mail which will receive your email!");
+			SkEmail.error("Aou must precise the mail which will receive your email!");
 
 		}
 	}
