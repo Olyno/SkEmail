@@ -1,4 +1,4 @@
-package com.alexlew.skemail.expressions.EmailServices;
+package com.alexlew.skemail.expressions.EmailServices.Yahoo;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -13,18 +13,18 @@ import ch.njol.util.Kleenean;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 
-@Name("Hotmail service")
-@Description("Returns the hotmail service as EmailService.")
+@Name("AT&T service")
+@Description("Returns the att service as EmailService.")
 @Examples({
-        "set {_service} to new hotmail service"
+        "set {_service} to new att service"
 })
-@Since("1.3")
+@Since("1.4")
 
-public class Hotmail extends SimpleExpression<EmailService> {
+public class ATT extends SimpleExpression<EmailService> {
 
     static {
-        Skript.registerExpression(Hotmail.class, EmailService.class, ExpressionType.SIMPLE,
-                "[new] hotmail [(service|session)]");
+        Skript.registerExpression(ATT.class, EmailService.class, ExpressionType.SIMPLE,
+                "[new] at[&]t [(service|session)]");
     }
 
     @Override
@@ -35,10 +35,10 @@ public class Hotmail extends SimpleExpression<EmailService> {
     @Override
     protected EmailService[] get( Event e ) {
         EmailService service = new EmailService();
-        service.setName("hotmail");
-        service.setSmtp_address("smtp-mail.outlook.com");
-        service.setSmtp_port("587");
-        service.setImap_address("imap-mail.outlook.com");
+        service.setName("att");
+        service.setSmtp_address("smtp.att.yahoo.com");
+        service.setSmtp_port("465");
+        service.setImap_address("imap.att.yahoo.com");
         service.setImap_port("993");
         EmailService.lastEmailService = service;
         return new EmailService[] {service};
@@ -56,7 +56,7 @@ public class Hotmail extends SimpleExpression<EmailService> {
 
     @Override
     public String toString( Event e, boolean debug ) {
-        return "hotmail";
+        return "att";
     }
 
 }

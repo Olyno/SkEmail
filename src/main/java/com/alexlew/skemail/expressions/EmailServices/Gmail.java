@@ -59,7 +59,7 @@ public class Gmail extends SimpleExpression<EmailService> {
 
     @Override
     public String toString( Event e, boolean debug ) {
-        return "service";
+        return "gmail";
     }
 
 }

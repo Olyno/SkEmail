@@ -25,7 +25,7 @@ public class EffConnection extends Effect {
 
     static {
         Skript.registerEffect(EffConnection.class,
-                "(login|connect) to %emailservice% (account|session) [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] pass[word] %string% [and store [it] in %-objects%]");
+                "(login|connect) to %emailservice% [(account|session)] [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] pass[word] %string% [and store [it] in %-objects%]");
     }
 
     private Expression<EmailService> service;
@@ -42,10 +42,13 @@ public class EffConnection extends Effect {
         service = (Expression<EmailService>) expr[0];
         user = (Expression<String>) expr[1];
         pass = (Expression<String>) expr[2];
-        if (!(expr[3] instanceof Variable<?>)) {
-            System.out.println("[SkEmail] You can register the connection in a var, and only in a var, not " + expr[3].toString());
-            return false;
+        if (expr[3] != null) {
+            if (!(expr[3] instanceof Variable<?>)) {
+                System.out.println("[SkEmail] You can register the connection in a var, and only in a var, not " + expr[3].toString());
+                return false;
+            }
         }
+
         varExpr = (Variable<?>) expr[3];
         return true;
     }

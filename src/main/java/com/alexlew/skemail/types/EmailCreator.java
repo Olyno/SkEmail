@@ -31,7 +31,7 @@ public class EmailCreator {
 
                     @Override
                     public String toString(EmailCreator arg0, int arg1) {
-                        return null;
+                        return arg0.getInfos();
                     }
 
                     @Override
@@ -50,6 +50,7 @@ public class EmailCreator {
         {
             ScopeEmailCreator.lastEmailCreator.body = builder.body;
             ScopeEmailCreator.lastEmailCreator.object = builder.object;
+            ScopeEmailCreator.lastEmailCreator.author = builder.author;
             ScopeEmailCreator.lastEmailCreator.receivers = builder.receivers;
             ScopeEmailCreator.lastEmailCreator.attach_files = builder.attach_files;
         }
@@ -57,6 +58,7 @@ public class EmailCreator {
 
     private String body;
     private String object;
+    private String author;
     private String[] receivers;
     private String[] attach_files;
 
@@ -76,6 +78,7 @@ public class EmailCreator {
 
     public String getInfos() {
         String infos = "Receivers:" + ScopeEmailCreator.lastEmailCreator.getReceivers().toString() +
+                ";Author:" + ScopeEmailCreator.lastEmailCreator.getAuthor() +
                 ";Body:" + ScopeEmailCreator.lastEmailCreator.getBody() +
                 ";Object:" + ScopeEmailCreator.lastEmailCreator.getObject() +
                 ";Attachments:" + ScopeEmailCreator.lastEmailCreator.getAttachments().toString();
@@ -89,6 +92,7 @@ public class EmailCreator {
     public String[] getAttachments() {
         return attach_files;
     }
+
     public void addAttachment(String attach_file) {
         if (ScopeEmailCreator.lastEmailCreator.attach_files != null) {
             String[] str_array = attach_files;
@@ -152,4 +156,11 @@ public class EmailCreator {
 
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor( String author ) {
+        this.author = author;
+    }
 }

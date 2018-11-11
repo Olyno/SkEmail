@@ -30,6 +30,10 @@ public class SkEmail extends JavaPlugin {
 
        }
 
+       public static void error(String error) {
+	   		System.out.println("\u001B[31m[SkEmail] " + error + "\u001B[0m");
+	   }
+
 	   public static SkEmail getInstance() {
 	       return instance;
 	   }

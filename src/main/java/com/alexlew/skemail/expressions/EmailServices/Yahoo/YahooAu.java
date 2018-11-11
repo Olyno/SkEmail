@@ -1,4 +1,4 @@
-package com.alexlew.skemail.expressions.EmailServices;
+package com.alexlew.skemail.expressions.EmailServices.Yahoo;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -13,18 +13,18 @@ import ch.njol.util.Kleenean;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 
-@Name("Hotmail service")
-@Description("Returns the hotmail service as EmailService.")
+@Name("Yahoo Au service")
+@Description("Returns the yahoo au service as EmailService.")
 @Examples({
-        "set {_service} to new hotmail service"
+        "set {_service} to new yahoo au service"
 })
-@Since("1.3")
+@Since("1.4")
 
-public class Hotmail extends SimpleExpression<EmailService> {
+public class YahooAu extends SimpleExpression<EmailService> {
 
     static {
-        Skript.registerExpression(Hotmail.class, EmailService.class, ExpressionType.SIMPLE,
-                "[new] hotmail [(service|session)]");
+        Skript.registerExpression(YahooAu.class, EmailService.class, ExpressionType.SIMPLE,
+                "[new] yahoo (australian|au) [(service|session)]");
     }
 
     @Override
@@ -35,10 +35,10 @@ public class Hotmail extends SimpleExpression<EmailService> {
     @Override
     protected EmailService[] get( Event e ) {
         EmailService service = new EmailService();
-        service.setName("hotmail");
-        service.setSmtp_address("smtp-mail.outlook.com");
-        service.setSmtp_port("587");
-        service.setImap_address("imap-mail.outlook.com");
+        service.setName("yahoo au");
+        service.setSmtp_address("smtp.mail.yahoo.au");
+        service.setSmtp_port("465");
+        service.setImap_address("imap.mail.yahoo.au");
         service.setImap_port("993");
         EmailService.lastEmailService = service;
         return new EmailService[] {service};
@@ -56,7 +56,7 @@ public class Hotmail extends SimpleExpression<EmailService> {
 
     @Override
     public String toString( Event e, boolean debug ) {
-        return "hotmail";
+        return "yahoo au";
     }
 
 }

@@ -15,7 +15,7 @@ import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Name("Author of Email")
+@Name("Receiver of Email")
 @Description("Returns the author of an email. Can be set in a email scope")
 @Examples({
 		"set {_receivers::*} to receivers of {_email}"

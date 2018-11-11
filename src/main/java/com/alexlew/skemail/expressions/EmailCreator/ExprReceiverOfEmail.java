@@ -13,7 +13,7 @@ import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.ExpressionType;
 
-@Name("Author of Email")
+@Name("Receiver of Email")
 @Description("Returns the author of an email. Can be set in a email scope")
 @Examples({
 		"make new email:",
