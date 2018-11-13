@@ -1,6 +1,4 @@
 # SkEmail
-Skript addon to send emails
-
 ![Banner at this link: https://i.imgur.com/tO9GwwW.png](https://i.imgur.com/tO9GwwW.png)
 
 [Documentation](https://skripthub.net/docs/?addon=SkEmail) | [Source code](https://github.com/AlexLew95/SkEmail) | [Downloads](https://github.com/AlexLew95/SkEmail/releases) | [Any problem, suggestion, or issue? Say me here](https://github.com/AlexLew95/SkEmail/issues/new?template=bug_report.md)
