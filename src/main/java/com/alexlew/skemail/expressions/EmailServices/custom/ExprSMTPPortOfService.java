@@ -26,25 +26,25 @@ public class ExprSMTPPortOfService extends SimplePropertyExpression<EmailService
 	}
 
 	@Override
-	public String convert(EmailService service) {
+	public Object convert(EmailService service) {
 		return service.getSmtp_port();
 	}
 
 	@Override
 	public Class<?>[] acceptChange(final ChangeMode mode) {
 		if (mode == ChangeMode.SET || mode == ChangeMode.DELETE) {
-			return new Class[]{String.class};
+			return new Class[]{Object.class};
 		}
 		return null;
 	}
 
 	@Override
 	public void change(Event e, Object[] delta, ChangeMode mode) {
-		if (delta[0] instanceof String || delta[0] instanceof Integer && StringUtils.isNumeric((String) delta[0])) {
+		if (delta[0] instanceof String || (delta[0] instanceof Integer && StringUtils.isNumeric((String) delta[0]))) {
 			for (EmailService service : getExpr().getArray(e)) {
 				switch (mode) {
 					case SET:
-						service.setSmtp_port((String) delta[0]);
+						service.setSmtp_port(delta[0]);
 						break;
 					case DELETE:
 						service.setSmtp_port(null);
@@ -65,8 +65,8 @@ public class ExprSMTPPortOfService extends SimplePropertyExpression<EmailService
 	}
 
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+	public Class<? extends Object> getReturnType() {
+		return Object.class;
 	}
 }
 

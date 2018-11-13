@@ -25,7 +25,7 @@ public class EffConnection extends Effect {
 
     static {
         Skript.registerEffect(EffConnection.class,
-                "(login|connect) to %emailservice% [(account|session)] [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] pass[word] %string% [and store [it] in %-objects%]");
+                "(login|connect) to %emailservice% [(account|session)] [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] [pass[word]] %string% [and store [it] in %-objects%]");
     }
 
     private Expression<EmailService> service;

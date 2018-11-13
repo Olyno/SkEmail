@@ -59,8 +59,9 @@ public class EmailService {
         return smtp_port;
     }
 
-    public void setSmtp_port( String smtp_port ) {
-        this.smtp_port = smtp_port;
+    public void setSmtp_port( Object smtp_port ) {
+        String port = (String) smtp_port;
+        this.smtp_port = port;
     }
 
     public String getImap_address() {
@@ -75,8 +76,9 @@ public class EmailService {
         return imap_port;
     }
 
-    public void setImap_port( String imap_port ) {
-        this.imap_port = imap_port;
+    public void setImap_port( Object imap_port ) {
+        String port = (String) imap_port;
+        this.imap_port = port;
     }
 
     public String getName() {

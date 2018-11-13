@@ -107,7 +107,7 @@ public class EffSendLastEmail extends Effect {
 								try {
 									attachPart.attachFile(filePath);
 								} catch (IOException e1) {
-									SkEmail.error("Ahe file path of file (" + filePath + ") doesn't exist or is bad.");
+									SkEmail.error("The file path of file (" + filePath + ") doesn't exist or is bad.");
 									//e1.printStackTrace();
 								}
 
@@ -136,20 +136,20 @@ public class EffSendLastEmail extends Effect {
 						SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail \nIf the problem persists, try to reload your server.");
 						e1.printStackTrace();
 					} catch (UnsupportedEncodingException e1) {
-						SkEmail.error("Ane or more characters are not supported in your name. Try to use ASCII format for the author's name.");
+						SkEmail.error("One or more characters are not supported in your name. Try to use ASCII format for the author's name.");
 						//e1.printStackTrace();
 					}
 
 				} else {
-					SkEmail.error("Aou must add content in your email!");
+					SkEmail.error("You must add content in your email!");
 				}
 
 			} else {
-				SkEmail.error("Aou must precise the object/subject of your email!");
+				SkEmail.error("You must precise the object/subject of your email!");
 			}
 
 		} else {
-			SkEmail.error("Aou must precise the mail which will receive your email!");
+			SkEmail.error("You must precise the mail which will receive your email!");
 
 		}
 	}
