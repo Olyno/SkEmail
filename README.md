@@ -1,3 +1,4 @@
+![](https://travis-ci.org/AlexLew95/SkEmail.svg?branch=master)
 # SkEmail
 ![Banner at this link: https://i.imgur.com/tO9GwwW.png](https://i.imgur.com/tO9GwwW.png)
 
