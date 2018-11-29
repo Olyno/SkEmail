@@ -1,6 +1,0 @@
-language: java
-install: 
-- gradle assemble
-- gradle check
-script:
-- gradlew shadowjar
