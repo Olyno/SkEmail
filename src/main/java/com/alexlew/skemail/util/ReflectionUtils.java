@@ -1,4 +1,4 @@
-package com.alexlew.skemail.util;
+package com.alexlew.gameapi.util;
 
 import org.bukkit.Bukkit;
 
@@ -26,7 +26,7 @@ public class ReflectionUtils {
             Class.forName(clz);
             return true;
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return false;
 
@@ -42,7 +42,7 @@ public class ReflectionUtils {
         try {
             return Class.forName(clz);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class ReflectionUtils {
         try {
             return clz.getConstructor(parameters);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
@@ -68,7 +68,7 @@ public class ReflectionUtils {
         try {
             return getMethod(clz, method, parameters) != null;
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return false;
     }
@@ -77,7 +77,7 @@ public class ReflectionUtils {
         try {
             return clz.getDeclaredMethod(method, parameters);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
@@ -93,7 +93,7 @@ public class ReflectionUtils {
             m.setAccessible(true);
             return (T) m.invoke(instance, parameters);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
@@ -104,7 +104,7 @@ public class ReflectionUtils {
             method.setAccessible(true);
             return (T) method.invoke(instance, parameters);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
     }
@@ -121,6 +121,7 @@ public class ReflectionUtils {
             c.setAccessible(true);
             return c.newInstance();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -134,6 +135,7 @@ public class ReflectionUtils {
         try {
             return constructor.newInstance(objects);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -153,7 +155,7 @@ public class ReflectionUtils {
             f.set(obj, newValue);
             return true;
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return false;
     }
@@ -173,7 +175,7 @@ public class ReflectionUtils {
             f.setAccessible(true);
             return (T) f.get(obj);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return null;
 
