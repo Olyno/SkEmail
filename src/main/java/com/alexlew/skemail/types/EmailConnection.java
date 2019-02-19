@@ -9,8 +9,10 @@ public class EmailConnection {
 
     static {
         Classes.registerClass(new ClassInfo<EmailConnection>(EmailConnection.class, "emailconnection")
-                .user("emailconnection")
-                .name("emailconnection")
+                .user("email ?connect(ion)?")
+                .name("Email Connection Type")
+                .description("Store username and password.")
+                .examples("login to gmail service from mail \"myemail@gmail.com\" and password \"my password\"")
                 .parser(new Parser<EmailConnection>() {
 
                     @Override

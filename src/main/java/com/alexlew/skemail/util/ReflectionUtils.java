@@ -1,4 +1,4 @@
-package com.alexlew.gameapi.util;
+package com.alexlew.skemail.util;
 
 import org.bukkit.Bukkit;
 

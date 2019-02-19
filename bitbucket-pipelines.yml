@@ -7,4 +7,4 @@ pipelines:
         deployment: test
         script:
           - bash ./gradlew build
-          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"./build/libs/SkEmail.jar"
+          - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"./build/libs/SkEmail-1.5-all.jar"

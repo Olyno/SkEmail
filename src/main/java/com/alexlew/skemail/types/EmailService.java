@@ -9,8 +9,9 @@ public class EmailService {
 
     static {
         Classes.registerClass(new ClassInfo<EmailService>(EmailService.class, "emailservice")
-                .user("emailservice")
-                .name("emailservice")
+                .user("email ?service")
+                .name("Email Service Type")
+                .description("A email service like Gmail. Store smtp and imap, port and address.")
                 .parser(new Parser<EmailService>() {
 
                     @Override

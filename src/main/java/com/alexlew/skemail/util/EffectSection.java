@@ -4,16 +4,8 @@ import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
-import ch.njol.skript.lang.Condition;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.TriggerItem;
-import ch.njol.skript.lang.TriggerSection;
-import ch.njol.skript.log.HandlerList;
-import ch.njol.skript.log.LogHandler;
-import ch.njol.skript.log.ParseLogHandler;
-import ch.njol.skript.log.RetainingLogHandler;
-import ch.njol.skript.log.SkriptLogger;
+import ch.njol.skript.lang.*;
+import ch.njol.skript.log.*;
 import ch.njol.util.Kleenean;
 import ch.njol.util.StringUtils;
 import org.bukkit.event.Event;
@@ -34,7 +26,7 @@ public abstract class EffectSection extends Condition {
     private TriggerSection trigger = null;
     private boolean hasIfOrElseIf = false;
     private boolean executeNext = true;
-
+    
     public EffectSection() {
         if (this instanceof LazyEffectSection) //This one doesn't need to load the section separated.
             return;
@@ -55,12 +47,12 @@ public abstract class EffectSection extends Condition {
         //Then it will clear the nodes from the current node, so Skript won't parse it (you need to parse then later).
         ReflectionUtils.setField(SectionNode.class, n, "nodes", new ArrayList<Node>());
     }
-
+    
     @SuppressWarnings("unchecked")
     public static boolean isCurrentSection(Class<? extends EffectSection>... classes) {
         return getCurrentSection(classes) != null;
     }
-
+    
     @SuppressWarnings("unchecked")
     public static <T extends EffectSection> T getCurrentSection(Class<? extends EffectSection>... classes) {
         for (Class<? extends EffectSection> clz : classes) {
@@ -70,7 +62,7 @@ public abstract class EffectSection extends Condition {
         }
         return null;
     }
-
+    
     /**
      * A hacky method to fix wrong syntax inside of sections not being included in errors.
      * Why? Because before parsing the effect itself, Skript starts a ParseLogHandler, then,
@@ -100,14 +92,14 @@ public abstract class EffectSection extends Condition {
         toStop.forEach(LogHandler::stop); //Stopping them
         SkriptLogger.logAll(logger.getLog()); //Sending the errors to Skript logger.
     }
-
+    
     /**
-     * It is to replicate {@link ch.njol.skript.lang.Effect#execute(Event)}
+     * It is to replicate {@link Effect#execute(Event)}
      *
      * @param e - The Event
      */
     protected abstract void execute(Event e);
-
+    
     @Override
     public boolean check(Event e) {
         execute(e);
@@ -118,7 +110,7 @@ public abstract class EffectSection extends Condition {
         //can continue.
         return !hasSection();
     }
-
+    
     /**
      * It will load the section of this if any. It must be used before {@link #runSection(Event)}.
      *
@@ -130,12 +122,12 @@ public abstract class EffectSection extends Condition {
             EffectSection previous = map.put(getClass(), this);
             try {
                 trigger = new TriggerSection(section) {
-
+                    
                     @Override
                     public String toString(Event event, boolean b) {
                         return EffectSection.this.toString(event, b);
                     }
-
+                    
                     @Override
                     public TriggerItem walk(Event event) {
                         return walk(event, true);
@@ -153,7 +145,7 @@ public abstract class EffectSection extends Condition {
             section = null;
         }
     }
-
+    
     /**
      * It will load the section of this if any and then it will parse as in specific event.
      * Basically it will call {@link ScriptLoader#setCurrentEvent(String, Class[])}, parse the current section,
@@ -165,7 +157,7 @@ public abstract class EffectSection extends Condition {
      * @param events  - The classes that extends {@link Event}.
      */
     @SuppressWarnings("unchecked")
-	public void loadSection(String name, boolean setNext, Class<? extends Event>... events) {
+    public void loadSection(String name, boolean setNext, Class<? extends Event>... events) {
         if (section != null && name != null && events != null && events.length > 0) {
             String previousName = ScriptLoader.getCurrentEventName();
             Class<? extends Event>[] previousEvents = ScriptLoader.getCurrentEvents();
@@ -176,7 +168,7 @@ public abstract class EffectSection extends Condition {
             ScriptLoader.hasDelayBefore = previousDelay;
         }
     }
-
+    
     /**
      * Check if this has any section (basically check if it is inline condition or Condtional)
      *
@@ -185,7 +177,7 @@ public abstract class EffectSection extends Condition {
     public boolean hasSection() {
         return section != null || trigger != null;
     }
-
+    
     /**
      * Run the section.
      * <b>Note</b>: You must {@link #loadSection(boolean)} first and you should run it with same
@@ -197,7 +189,7 @@ public abstract class EffectSection extends Condition {
         executeNext = false;
         TriggerItem.walk(trigger, e);
     }
-
+    
     /**
      * It will check in case the effect wasn't used with 'if/else if' before
      * <code>
@@ -224,7 +216,7 @@ public abstract class EffectSection extends Condition {
             Skript.error("You can't use the effect in if/else if section.");
         return hasIfOrElseIf;
     }
-
+    
     /**
      * The section node of {@link EffectSection}.
      * It can return null if it was used after {@link #loadSection(boolean)} or

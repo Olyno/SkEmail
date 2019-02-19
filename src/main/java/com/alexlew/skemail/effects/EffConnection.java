@@ -1,18 +1,27 @@
 package com.alexlew.skemail.effects;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.VariableString;
+import ch.njol.util.Kleenean;
+import com.alexlew.skemail.SkEmail;
 import com.alexlew.skemail.types.EmailConnection;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
-import ch.njol.skript.lang.Effect;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.util.Kleenean;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import java.util.Properties;
 
 @Name("Connection")
 @Description("Connect to your email account.")
@@ -56,19 +65,46 @@ public class EffConnection extends Effect {
     @Override
     protected void execute(Event e) {
         EmailConnection thisConnection = new EmailConnection();
-        thisConnection.setUsername(user.getSingle(e));
-        thisConnection.setPassword(pass.getSingle(e));
-        thisConnection.setService(service.getSingle(e));
-        lastEmailConnection = thisConnection;
-        if (varExpr != null) {
-            varExpr.change(e, new EmailConnection[] { thisConnection }, Changer.ChangeMode.SET);
+        EmailService serviceType = service.getSingle(e);
+        int port = Integer.parseInt(serviceType.getSmtp_port());
+        String host = serviceType.getSmtp_address();
+        String login = user.getSingle(e);
+        String pwd = pass.getSingle(e);
+    
+        try {
+            Properties props = new Properties();
+            props.put("mail.smtp.host", serviceType.getSmtp_address());
+            props.put("mail.smtp.socketFactory.port", serviceType.getSmtp_port());
+            props.put("mail.smtp.socketFactory.class",
+                    "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.port", serviceType.getSmtp_port());
+            Session session = Session.getInstance(props, null);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, port, login, pwd);
+            transport.close();
+            
+            // If success
+            thisConnection.setUsername(login);
+            thisConnection.setPassword(pwd);
+            thisConnection.setService(serviceType);
+            lastEmailConnection = thisConnection;
+            if (varExpr != null) {
+                varExpr.change(e, new EmailConnection[] { thisConnection }, Changer.ChangeMode.SET);
+            }
+       
+        } catch (AuthenticationFailedException e1) {
+            SkEmail.error("You used a wrong mail address or password. Please check them.");
+            //e1.printStackTrace();
+       
+        } catch (MessagingException e2) {
+            System.out.println("for other failures");
+            e2.printStackTrace();
         }
-
-
     }
 
     @Override
     public String toString(Event e, boolean debug) {
-        return "connection to mail " + user.getSingle(e) + " and password " + pass.getSingle(e);
+        return "Connection to mail " + user.getSingle(e) + " and password " + pass.getSingle(e);
     }
 }

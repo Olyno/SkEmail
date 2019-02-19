@@ -1,25 +1,28 @@
 package com.alexlew.skemail.effects;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-
-import com.alexlew.skemail.SkEmail;
-import com.alexlew.skemail.types.EmailConnection;
-import com.alexlew.skemail.types.EmailService;
-import org.bukkit.event.Event;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-
-import com.alexlew.skemail.types.EmailCreator;
-
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
+import com.alexlew.skemail.SkEmail;
+import com.alexlew.skemail.types.EmailConnection;
+import com.alexlew.skemail.types.EmailCreator;
+import com.alexlew.skemail.types.EmailService;
+import org.bukkit.event.Event;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 @Name("Send EmailCreator")
 @Description("Send the email")
@@ -28,10 +31,10 @@ import ch.njol.util.Kleenean;
 })
 @Since("1.0")
 
-public class EffSendLastEmail extends Effect {
+public class EffSendEmail extends Effect {
 
 	static {
-		Skript.registerEffect(EffSendLastEmail.class,
+		Skript.registerEffect(EffSendEmail.class,
 				"send %emailcreator% [to %-string%] [using %-emailconnection%]");
 	}
 
@@ -40,6 +43,7 @@ public class EffSendLastEmail extends Effect {
 	private Expression<EmailConnection> connection;
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		email = (Expression<EmailCreator>) expr[0];
 		rec = (Expression<String>) expr[1];
@@ -63,11 +67,9 @@ public class EffSendLastEmail extends Effect {
 		EmailService service = connect.getService();
 
 		if (receivers != null) {
-			if(object!=null) {
-				if(body!=null) {
-					body = body.replace("%nl%", "<br>");
-					body = body.replace("%new line%", "<br>");
-					body = body.replace("%newline%", "<br>");
+			if (object != null) {
+				if (body != null) {
+					body = body.replaceAll("\n", "<br>");
 
 					Properties props = new Properties();
 					props.put("mail.smtp.host", service.getSmtp_address());

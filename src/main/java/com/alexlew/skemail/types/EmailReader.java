@@ -6,14 +6,14 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 
 public class EmailReader {
 
     static {
         Classes.registerClass(new ClassInfo<Message>(Message.class, "emailreader")
-                .user("emailreader")
-                .name("emailreader")
+                .user("email ?reader")
+                .name("Email Reader Type")
+                .description("Will store data to read mails.")
                 .parser(new Parser<Message>() {
 
                     @Override

@@ -1,11 +1,10 @@
 package com.alexlew.skemail.types;
 
-import com.alexlew.skemail.scopes.ScopeEmailCreator;
-
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
+import com.alexlew.skemail.scopes.ScopeEmailCreator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +14,9 @@ public class EmailCreator {
 
     static {
         Classes.registerClass(new ClassInfo<EmailCreator>(EmailCreator.class, "emailcreator")
-                .user("emailcreator")
-                .name("emailcreator")
+                .user("email ?creat(or|ion)")
+                .name("Email Creator Type")
+                .description("Will store all data before send the email like the object, or the body.")
                 .parser(new Parser<EmailCreator>() {
 
                     @Override
