@@ -1,6 +1,10 @@
-![](https://travis-ci.org/AlexLew95/SkEmail.svg?branch=master)
 # SkEmail
 ![Banner at this link: https://i.imgur.com/tO9GwwW.png](https://i.imgur.com/tO9GwwW.png)
+
+[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
+
+[![Bitbucket issues](https://img.shields.io/bitbucket/issues/AlexLew95/skemail.svg)](https://bitbucket.org/AlexLew95/skemail/issues?status=new&status=open)
 
 [Documentation](https://skripthub.net/docs/?addon=SkEmail) | [Source code](https://github.com/AlexLew95/SkEmail) | [Downloads](https://github.com/AlexLew95/SkEmail/releases) | [Any problem, suggestion, or issue? Say me here](https://github.com/AlexLew95/SkEmail/issues/new?template=bug_report.md)
 
@@ -15,7 +19,7 @@ I will only help you with the last version, and not older version. Think to upda
 
 **__Usage example:__**
 
-```python
+```vb
 on load:
     login to gmail service from mail "myemail@gmail.com" and password "my password"
  
