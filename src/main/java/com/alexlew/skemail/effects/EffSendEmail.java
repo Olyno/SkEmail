@@ -10,19 +10,11 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
-import com.alexlew.skemail.types.EmailConnection;
-import com.alexlew.skemail.types.EmailCreator;
-import com.alexlew.skemail.types.EmailService;
+import com.alexlew.skemail.expressions.*;
 import org.bukkit.event.Event;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
+import javax.mail.internet.*;
 
 @Name("Send EmailCreator")
 @Description("Send the email")
@@ -35,124 +27,65 @@ public class EffSendEmail extends Effect {
 
 	static {
 		Skript.registerEffect(EffSendEmail.class,
-				"send %emailcreator% [to %-string%] [using %-emailconnection%]");
+				"send %email% [to %-string%] [(using|with) (%-session%|%-string%)]");
 	}
 
-	private Expression<EmailCreator> email;
+	private Expression<Message> email;
 	private Expression<String> rec;
-	private Expression<EmailConnection> connection;
+	private Expression<Object> connection;
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
-		email = (Expression<EmailCreator>) expr[0];
+		email = (Expression<Message>) expr[0];
 		rec = (Expression<String>) expr[1];
-		if (expr[2] instanceof EmailConnection)	{
-			connection = (Expression<EmailConnection>) expr[2];
+		if (expr[2] != null) {
+			connection = (Expression<Object>) expr[2];
 		}
-
 		return true;
 	}
 
 	@Override
 	protected void execute(Event e) {
-		String[] receivers = rec == null ? email.getSingle(e).getReceivers() : new String[] {rec.getSingle(e)};
-		EmailConnection connect = connection == null ? EffConnection.lastEmailConnection : connection.getSingle(e);
-		String object = email.getSingle(e).getObject();
-		String body = email.getSingle(e).getBody();
-		String author = email.getSingle(e).getAuthor();
-		String[] attach_files = email.getSingle(e).getAttachments();
-		String username = connect.getUsername();
-		String password = connect.getPassword();
-		EmailService service = connect.getService();
-
-		if (receivers != null) {
-			if (object != null) {
-				if (body != null) {
-					body = body.replaceAll("\n", "<br>");
-
-					Properties props = new Properties();
-					props.put("mail.smtp.host", service.getSmtp_address());
-					props.put("mail.smtp.socketFactory.port", service.getSmtp_port());
-					props.put("mail.smtp.socketFactory.class",
-							"javax.net.ssl.SSLSocketFactory");
-					props.put("mail.smtp.auth", "true");
-					props.put("mail.smtp.port", service.getSmtp_port());
-
-					Session session = Session.getDefaultInstance(props,
-							new javax.mail.Authenticator() {
-								protected PasswordAuthentication getPasswordAuthentication() {
-									return new PasswordAuthentication(username, password);
-								}
-							});
-
-					try {
-
-						Message message = new MimeMessage(session);
-						if (author != null) {
-							message.setFrom(new InternetAddress(username, author));
-						} else {
-							message.setFrom(new InternetAddress(username));
-						}
-						message.setSubject(object);
-
-						BodyPart messageBodyPart = new MimeBodyPart();
-						messageBodyPart.setContent(body, "text/html; charset=UTF-8");
-
-						Multipart multipart = new MimeMultipart();
-						multipart.addBodyPart(messageBodyPart);
-
-						if (attach_files != null && attach_files.length > 0) {
-							for (String filePath : attach_files) {
-								MimeBodyPart attachPart = new MimeBodyPart();
-
-								try {
-									attachPart.attachFile(filePath);
-								} catch (IOException e1) {
-									SkEmail.error("The file path of file (" + filePath + ") doesn't exist or is bad.");
-									//e1.printStackTrace();
-								}
-
-								multipart.addBodyPart(attachPart);
-							}
-						}
-
-						if (receivers != null && receivers.length > 0) {
-							for (String receiver : receivers) {
-								if (receiver.contains("@")) {
-									message.addRecipients(Message.RecipientType.TO,
-											InternetAddress.parse(receiver));
-								} else {
-									Skript.warning("[SkEmail] This receiver is not valid: " + receiver);
-								}
-
-							}
-
-						}
-						message.setContent(multipart);
-
-						Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
-						Transport.send(message);
-
-					} catch (MessagingException e1) {
-						SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail \nIf the problem persists, try to reload your server.");
-						e1.printStackTrace();
-					} catch (UnsupportedEncodingException e1) {
-						SkEmail.error("One or more characters are not supported in your name. Try to use ASCII format for the author's name.");
-						//e1.printStackTrace();
-					}
-
-				} else {
-					SkEmail.error("You must add content in your email!");
-				}
-
+		Address[] addresses = new InternetAddress[] {};
+		try {
+			if (rec != null) {
+				InternetAddress address = new InternetAddress(rec.getSingle(e));
+				address.validate();
+				addresses = new InternetAddress[] {address};
 			} else {
-				SkEmail.error("You must precise the object/subject of your email!");
+				addresses = email.getSingle(e).getAllRecipients();
 			}
+		} catch (AddressException e1) {
+			SkEmail.error("This receiver is not valid: " + rec.getSingle(e));
+		} catch (MessagingException e1) {
+			e1.printStackTrace();
+		}
+		
+		Message emailObject = email.getSingle(e);
+		Transport transport = null;
+		
+		try {
+			if (connection == null) {
+				transport = EffConnection.lastConnection.getTransport("smtp");
+			} else {
+				Object c = connection.getSingle(e);
+				if (c instanceof String) {
+					transport = EffConnection.accounts.get(c).getTransport("smtp");
+				} else {
+					transport = ((Session) c).getTransport("smtp");
+				}
+			}
+			Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
+			System.out.println(transport);
+			transport.sendMessage(emailObject, emailObject.getAllRecipients());
 
-		} else {
-			SkEmail.error("You must precise the mail which will receive your email!");
-
+		} catch (MessagingException e1) {
+			SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
+			SkEmail.error("If the problem persists, try to reload your server.");
+			e1.printStackTrace();
+		} catch (IllegalStateException e1) {
+			SkEmail.error("Impossible to connect to your mail box to send your email. Try to restart your server.");
 		}
 	}
 
@@ -161,4 +94,21 @@ public class EffSendEmail extends Effect {
 		return "send " + email.toString(e, debug);
 	}
 
+	/*public static Message build() {
+		try {
+			Message message = new MimeMessage(session);
+			Multipart multipart = new MimeMultipart();
+			message.setFrom(ExprAuthorsOfEmail.emailAuthor);
+			message.setSubject(ExprObjectOfEmail.emailObject);
+			message.addRecipients(Message.RecipientType.TO, ExprReceiversOfEmail.emailReceivers);
+			multipart.addBodyPart(ExprBodyOfEmail.emailBody);
+			multipart.addBodyPart(ExprAttachFilesOfEmail.emailAttachments);
+			message.setContent(multipart);
+			return message;
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+	}*/
+	
 }

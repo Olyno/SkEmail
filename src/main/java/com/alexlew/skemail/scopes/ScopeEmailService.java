@@ -11,7 +11,6 @@ import ch.njol.util.Kleenean;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 
-import com.alexlew.skemail.types.EmailCreator;
 import com.alexlew.skemail.util.EffectSection;
 
 @Name("Scope Email Service")

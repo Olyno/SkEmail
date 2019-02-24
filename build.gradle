@@ -41,5 +41,5 @@ processResources {
 dependencies {
     implementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
     implementation 'ch.njol:skript:2.2-SNAPSHOT'
-    compile group: 'javax.mail', name: 'mail', version: '1.4.7'
+    compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
 }

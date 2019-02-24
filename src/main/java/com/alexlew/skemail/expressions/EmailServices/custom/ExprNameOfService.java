@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import com.alexlew.skemail.types.EmailCreator;
 import com.alexlew.skemail.types.EmailService;
 import org.bukkit.event.Event;
 

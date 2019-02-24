@@ -2,13 +2,15 @@ package com.alexlew.skemail.types;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
+import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 
 public class EmailService {
 
     static {
-        Classes.registerClass(new ClassInfo<EmailService>(EmailService.class, "emailservice")
+        Classes.registerClass(new ClassInfo<>(EmailService.class, "emailservice")
+                .defaultExpression(new EventValueExpression<>(EmailService.class))
                 .user("email ?service")
                 .name("Email Service Type")
                 .description("A email service like Gmail. Store smtp and imap, port and address.")
