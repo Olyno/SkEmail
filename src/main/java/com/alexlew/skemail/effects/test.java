@@ -5,98 +5,63 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import com.alexlew.skemail.SkEmail;
 import org.bukkit.event.Event;
 
 import javax.mail.*;
-import javax.mail.internet.*;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 public class test extends Effect {
 	
 	static {
-		Skript.registerEffect(test.class, "just a test for %string%");
+		Skript.registerEffect(test.class, "user[name] %string% password %string% [e]mail %email%");
 	}
 	
-	private Expression<String> mail;
+	private Expression<String> user;
+	private Expression<String> pass;
+	private Expression<Message> message;
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean init( Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult ) {
-		mail = (Expression<String>) expr[0];
+		user = (Expression<String>) expr[0];
+		pass = (Expression<String>) expr[1];
+		message = (Expression<Message>) expr[2];
 		return true;
 	}
 	
 	@Override
 	protected void execute( Event e ) {
+		String username = user.getSingle(e);
+		String password = pass.getSingle(e);
+		Message email = message.getSingle(e);
+		
 		try {
-			Session session = EffConnection.accounts.get(mail.getSingle(e));
-			Transport transport = null;
-			String[] attach_files = new String[0];
-			transport = EffConnection.accounts.get(mail.getSingle(e)).getTransport("smtp");
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.socketFactory.port", "465");
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", "465");
 			
-			// Nouveau MimeMessage
-			Message message = new MimeMessage(session);
+			Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							PasswordAuthentication pwd = new PasswordAuthentication(username, password);
+							System.out.println("PWD: ");
+							System.out.println(pwd.getUserName());
+							System.out.println(pwd.getPassword());
+							return pwd;
+						}
+					});
 			
-			String author = "dsdsd";
-			// On set la "from part"
-			if (author != null) {
-				message.setFrom(new InternetAddress(transport.getURLName().getUsername(), author));
-			} else {
-				message.setFrom(new InternetAddress(transport.getURLName().getUsername()));
-			}
+			Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+			Transport.send(email);
 			
-			// On set l'objet
-			message.setSubject("aaaa");
-			
-			// On créer un body à ce Mime
-			BodyPart messageBodyPart = new MimeBodyPart();
-			
-			// On set le content du body
-			messageBodyPart.setContent("qqqqqq", "text/html; charset=UTF-8");
-			
-			// On créer plusieurs parties de ce Mime
-			Multipart multipart = new MimeMultipart();
-			
-			// On ajoute la partie "body"
-			multipart.addBodyPart(messageBodyPart);
-			
-			if (attach_files != null && attach_files.length > 0) {
-				for (String filePath : attach_files) {
-					MimeBodyPart attachPart = new MimeBodyPart();
-					
-					try {
-						attachPart.attachFile(filePath);
-					} catch (IOException e1) {
-						SkEmail.error("The file path of file (" + filePath + ") doesn't exist or is not correct.");
-						//e1.printStackTrace();
-					}
-					
-					multipart.addBodyPart(attachPart);
-				}
-			}
-			
-			message.addRecipients(Message.RecipientType.TO, new Address[] {new InternetAddress("meiji.sakurai@gmail.com")});
-			message.setContent(multipart);
-			
-			System.out.println(multipart.getBodyPart(0).getContentType());
-			System.out.println(multipart.removeBodyPart(multipart.getBodyPart(0)));
-			System.out.println(multipart.getCount());
-			//Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
-			//transport.sendMessage(message, message.getAllRecipients());
-		} catch (NoSuchProviderException e1) {
-			e1.printStackTrace();
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		} catch (AddressException e1) {
-			e1.printStackTrace();
 		} catch (MessagingException e1) {
 			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} finally {
 		}
-		
 	}
 	
 	@Override

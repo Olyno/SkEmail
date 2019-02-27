@@ -10,11 +10,11 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
-import com.alexlew.skemail.expressions.*;
 import org.bukkit.event.Event;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
 
 @Name("Send EmailCreator")
 @Description("Send the email")
@@ -47,38 +47,11 @@ public class EffSendEmail extends Effect {
 
 	@Override
 	protected void execute(Event e) {
-		Address[] addresses = new InternetAddress[] {};
-		try {
-			if (rec != null) {
-				InternetAddress address = new InternetAddress(rec.getSingle(e));
-				address.validate();
-				addresses = new InternetAddress[] {address};
-			} else {
-				addresses = email.getSingle(e).getAllRecipients();
-			}
-		} catch (AddressException e1) {
-			SkEmail.error("This receiver is not valid: " + rec.getSingle(e));
-		} catch (MessagingException e1) {
-			e1.printStackTrace();
-		}
-		
 		Message emailObject = email.getSingle(e);
-		Transport transport = null;
 		
 		try {
-			if (connection == null) {
-				transport = EffConnection.lastConnection.getTransport("smtp");
-			} else {
-				Object c = connection.getSingle(e);
-				if (c instanceof String) {
-					transport = EffConnection.accounts.get(c).getTransport("smtp");
-				} else {
-					transport = ((Session) c).getTransport("smtp");
-				}
-			}
 			Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
-			System.out.println(transport);
-			transport.sendMessage(emailObject, emailObject.getAllRecipients());
+			Transport.send(emailObject, emailObject.getAllRecipients());
 
 		} catch (MessagingException e1) {
 			SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");

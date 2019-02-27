@@ -10,15 +10,13 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.effects.EffConnection;
 import com.alexlew.skemail.expressions.ExprAttachFilesOfEmail;
-import org.bukkit.event.Event;
-
 import com.alexlew.skemail.util.EffectSection;
+import org.bukkit.event.Event;
 
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Name("Scope Email Creation")
 @Description("Scope for mail creation")
