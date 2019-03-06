@@ -14,7 +14,6 @@ import ch.njol.skript.lang.VariableString;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
 import com.alexlew.skemail.events.javaxmail.MailConnection;
-import com.alexlew.skemail.events.javaxmail.MailTransport;
 import com.alexlew.skemail.types.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Event;
@@ -23,7 +22,7 @@ import javax.mail.*;
 import java.util.HashMap;
 import java.util.Properties;
 
-@Name("MailConnection")
+@Name("Connection")
 @Description("Connect to your email account.")
 @Examples({
 		"login to gmail session \"email address of connection\" using pass \"password of the email address\""
@@ -33,17 +32,17 @@ import java.util.Properties;
 public class EffConnection extends Effect {
 	
 	public static HashMap<String, Session> accounts = new HashMap<>();
-	public static Session lastConnection;
 	public static Session lastSession;
 	
 	static {
 		Skript.registerEffect(EffConnection.class,
-				"(login|connect) to %emailservice% [(account|session)] [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] [pass[word]] %string% [and store [it] in %-objects%]");
+				"(login|connect) to %emailservice% [(account|session)] [(with|as|from) (address|user[name]|[e]mail)] %string% (and|using) [with] [pass[word]] %string% [as %-string%] [and store [it] in %-objects%]");
 	}
 	
 	private Expression<EmailService> service;
 	private Expression<String> user;
 	private Expression<String> pass;
+	private Expression<String> id;
 	private Variable<?> varExpr;
 	private VariableString varName;
 	
@@ -54,22 +53,25 @@ public class EffConnection extends Effect {
 		user = (Expression<String>) expr[1];
 		pass = (Expression<String>) expr[2];
 		if (expr[3] != null) {
-			if (!(expr[3] instanceof Variable<?>)) {
-				SkEmail.error("You can register the connection in a var, and only in a var, not " + expr[3].toString());
+			id = (Expression<String>) expr[3];
+		}
+		if (expr[4] != null) {
+			if (!(expr[4] instanceof Variable<?>)) {
+				SkEmail.error("You can register the connection in a var, and only in a var, not " + expr[4].toString());
 				return false;
 			}
 		}
 		
-		varExpr = (Variable<?>) expr[3];
+		varExpr = (Variable<?>) expr[4];
 		return true;
 	}
 	
 	@Override
 	protected void execute( Event e ) {
 		EmailService serviceType = service.getSingle(e);
-		String port = serviceType.getSmtp_port();
 		String host = serviceType.getSmtp_address();
-		String username = user.getSingle(e);
+		Integer port = Integer.parseInt(serviceType.getSmtp_port());
+		String username = id != null ? id.getSingle(e) : user.getSingle(e);
 		String password = pass.getSingle(e);
 		
 		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
@@ -94,13 +96,12 @@ public class EffConnection extends Effect {
 				
 				Transport transport = session.getTransport("smtp");
 				transport.addConnectionListener(new MailConnection());
-				transport.addTransportListener(new MailTransport());
-				transport.connect(host, Integer.parseInt(port), username, password);
+				transport.connect(host, port, username, password);
 				
 				// If success
+				transport.close();
 				accounts.remove(username);
 				accounts.put(username, session);
-				lastConnection = session;
 				lastSession = session;
 				if (varExpr != null) {
 					varExpr.change(e, new Object[]{session}, Changer.ChangeMode.SET);
@@ -117,6 +118,18 @@ public class EffConnection extends Effect {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "MailConnection to mail " + user.getSingle(e) + " and password " + pass.getSingle(e);
+		String username =
+				user.getSingle(e) != null ?
+						user.getSingle(e).isBlank() ?
+								"null"
+								: user.getSingle(e)
+						: "null";
+		String password =
+				pass.getSingle(e) != null ?
+						pass.getSingle(e).isBlank() ?
+								"null"
+								: pass.getSingle(e)
+						: "null";
+		return "Connection to mail \"" + username + "\" and password \"" + password + "\"";
 	}
 }

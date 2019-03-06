@@ -14,6 +14,7 @@ public class EvtTransport {
 		Skript.registerEvent("Email Sent Event", SimpleEvent.class, TransportBukkit.class,
 				"[e]mail (sent|transport)"
 		);
+		
 		EventValues.registerEventValue(TransportBukkit.class, Message.class, new Getter<Message, TransportBukkit>() {
 			
 			@Override

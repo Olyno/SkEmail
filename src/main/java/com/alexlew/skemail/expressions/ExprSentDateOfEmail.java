@@ -10,27 +10,29 @@ import org.bukkit.event.Event;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import java.util.Date;
 
-@Name("Object of Email")
-@Description("Returns the object of an email. Can be set in a email scope")
+@Name("Sent Date of Email")
+@Description("Returns the sent date of an email. Can be set in a email scope")
 @Examples({
 		"make new email:",
-		"\tset object of email to \"Test\""
+		"\tset sent date of email to \"welcome on my new server!\""
 })
-@Since("1.0")
+@Since("1.5")
 
-public class ExprSubjectOfEmail extends SimplePropertyExpression<Message, String> {
+public class ExprSentDateOfEmail extends SimplePropertyExpression<Message, Date> {
 	
 	static {
-		register(ExprSubjectOfEmail.class, String.class,
-				"(title|subject|object)", "email");
+		register(ExprSentDateOfEmail.class, Date.class,
+				"sent date", "email");
 	}
 	
 	@Override
-	public String convert( Message email ) {
+	public Date convert( Message email ) {
 		try {
-			return email.getSubject();
+			return email.getSentDate();
 		} catch (MessagingException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -49,28 +51,26 @@ public class ExprSubjectOfEmail extends SimplePropertyExpression<Message, String
 			for (Message email : getExpr().getArray(e)) {
 				switch (mode) {
 					case SET:
-						email.setSubject((String) delta[0]);
-						break;
+						email.setSentDate((Date) delta[0]);
 					case DELETE:
-						email.setSubject(null);
-						break;
+						email.setSentDate(null);
 					default:
 						break;
 				}
 			}
-			
-		} catch (MessagingException ignored) {
+		} catch (MessagingException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
 	@Override
 	protected String getPropertyName() {
-		return "subject";
+		return "sent date";
 	}
 	
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+	public Class<? extends Date> getReturnType() {
+		return Date.class;
 	}
 }
 

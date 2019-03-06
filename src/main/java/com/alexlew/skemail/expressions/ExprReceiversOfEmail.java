@@ -1,16 +1,18 @@
 package com.alexlew.skemail.expressions;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
 import org.bukkit.event.Event;
-
-import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
-import ch.njol.skript.lang.ExpressionType;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -21,8 +23,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-@Name("Receiver of Email")
-@Description("Returns the receivers of an email. Can be set in a email scope")
+@Name("Receiver/Recipients of Email")
+@Description("Returns the receivers/recipients of an email. Can be set in a email scope")
 @Examples({
 		"make new email:",
 		"\tset receiver of email to \"myfriend@gmail.com\""
@@ -33,8 +35,8 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 
 	static {
 		Skript.registerExpression(ExprReceiversOfEmail.class, Address.class, ExpressionType.SIMPLE,
-				"%email%'s receiver[s]",
-				"receiver[s] of %email%");
+				"%email%'s (receiver|recipient)[s]",
+				"(receiver|recipient)[s] of %email%");
 	}
 
 	private Expression<Message> message;

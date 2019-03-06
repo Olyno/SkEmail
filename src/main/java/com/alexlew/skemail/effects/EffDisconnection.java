@@ -57,6 +57,12 @@ public class EffDisconnection extends Effect {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return null;
+		String username =
+				login.getSingle(e) != null ?
+						login.getSingle(e).isBlank() ?
+								"null"
+								: login.getSingle(e)
+						: "null";
+		return "Disconnection from \"" + username + "\"";
 	}
 }

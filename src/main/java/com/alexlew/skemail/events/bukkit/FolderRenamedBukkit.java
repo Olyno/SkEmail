@@ -3,13 +3,17 @@ package com.alexlew.skemail.events.bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import javax.mail.event.ConnectionEvent;
+import javax.mail.Folder;
+import javax.mail.event.FolderEvent;
 
-public class ConnectionBukkit extends Event {
+public class FolderRenamedBukkit extends Event {
 	
 	public static final HandlerList handlers = new HandlerList();
 	
-	public ConnectionBukkit( ConnectionEvent connection ) {
+	private Folder folder;
+	
+	public FolderRenamedBukkit( FolderEvent folderevent ) {
+		folder = folderevent.getFolder();
 	}
 	
 	public static HandlerList getHandlerList() {
@@ -21,4 +25,7 @@ public class ConnectionBukkit extends Event {
 		return handlers;
 	}
 	
+	public Folder getFolder() {
+		return folder;
+	}
 }

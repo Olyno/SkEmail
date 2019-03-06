@@ -10,23 +10,23 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.alexlew.skemail.effects.EffConnection;
+import com.alexlew.skemail.effects.EffSendEmail;
 import org.bukkit.event.Event;
 
-import javax.mail.Session;
+import javax.mail.Message;
 
-@Name("Last Email")
-@Description("Returns the email that was last made in a email scope")
+@Name("Last Email Sent")
+@Description("Returns the email that was last sent.")
 @Examples({
-		"set {_email} to the last email"
+		"set {_email} to the last email sent"
 })
-@Since("1.0")
+@Since("1.5")
 
-public class ExprLastConnection extends SimpleExpression<Session> {
+public class ExprLastEmailSent extends SimpleExpression<Message> {
 	
 	static {
-		Skript.registerExpression(ExprLastConnection.class, Session.class, ExpressionType.SIMPLE,
-				"[the] last[ly] [connected] (account|session)");
+		Skript.registerExpression(ExprLastEmailSent.class, Message.class, ExpressionType.SIMPLE,
+				"[the] last[ly] [e]mail (sent|transported)");
 	}
 	
 	@Override
@@ -35,8 +35,8 @@ public class ExprLastConnection extends SimpleExpression<Session> {
 	}
 	
 	@Override
-	protected Session[] get( Event e ) {
-		return new Session[]{EffConnection.lastSession};
+	protected Message[] get( Event e ) {
+		return new Message[]{EffSendEmail.lastEmailSent};
 	}
 	
 	@Override
@@ -45,13 +45,13 @@ public class ExprLastConnection extends SimpleExpression<Session> {
 	}
 	
 	@Override
-	public Class<? extends Session> getReturnType() {
-		return Session.class;
+	public Class<? extends Message> getReturnType() {
+		return Message.class;
 	}
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "the last connection";
+		return "the last email sent";
 	}
 	
 }

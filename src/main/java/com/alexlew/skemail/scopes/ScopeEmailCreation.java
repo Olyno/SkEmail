@@ -34,7 +34,7 @@ public class ScopeEmailCreation extends EffectSection {
 	
 	static {
 		Skript.registerCondition(ScopeEmailCreation.class,
-				"(make|do|create) [new] [e]mail [(using|with|for) [account] (%-emailconnection%|%-string%)]");
+				"(make|do|create) [new] [e]mail [(using|with|for) [account] (%-session%|%-string%)]");
 	}
 
 	private Expression<Object> connection;
@@ -59,7 +59,7 @@ public class ScopeEmailCreation extends EffectSection {
 		Object c = connection == null ? null : connection.getSingle(e);
 		Session session;
 		if (c == null) {
-			session = EffConnection.lastConnection;
+			session = EffConnection.lastSession;
 		} else if (c instanceof String) {
 			session = EffConnection.accounts.get(c);
 		} else {

@@ -10,21 +10,30 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
+import com.alexlew.skemail.events.javaxmail.MailTransport;
 import org.bukkit.event.Event;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Transport;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import java.io.IOException;
 
-@Name("Send EmailCreator")
-@Description("Send the email")
+@Name("Send Email")
+@Description("Send an email")
 @Examples({
-		"send last email"
+		"command send:" +
+				"\ttrigger:" +
+				"\t\tmake new email:" +
+				"\t\t\tset object of email to \"Look this email, it's awesome!\"" +
+				"\t\t\tset body of email to \"Hey dude, %nl% I got a cat, what name can I give him?\"" +
+				"\t\t\tset receiver of email to \"mybestfriend@gmailcom\"" +
+				"\t\tsend last email created"
 })
 @Since("1.0")
 
 public class EffSendEmail extends Effect {
-
+	
+	public static Message lastEmailSent;
+	
 	static {
 		Skript.registerEffect(EffSendEmail.class,
 				"send %email% [to %-string%] [(using|with) (%-session%|%-string%)]");
@@ -38,7 +47,9 @@ public class EffSendEmail extends Effect {
 	@SuppressWarnings("unchecked")
 	public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
 		email = (Expression<Message>) expr[0];
-		rec = (Expression<String>) expr[1];
+		if (expr[1] != null) {
+			rec = (Expression<String>) expr[1];
+		}
 		if (expr[2] != null) {
 			connection = (Expression<Object>) expr[2];
 		}
@@ -48,11 +59,48 @@ public class EffSendEmail extends Effect {
 	@Override
 	protected void execute(Event e) {
 		Message emailObject = email.getSingle(e);
+		Session session = null;
 		
 		try {
+			
 			Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
-			Transport.send(emailObject, emailObject.getAllRecipients());
-
+			
+			if (connection != null) {
+				Object co = connection.getSingle(e);
+				if (co instanceof String) {
+					if (EffConnection.accounts.containsKey(co)) {
+						session = EffConnection.accounts.get(co);
+					} else {
+						SkEmail.error("This account is not connected: " + co);
+					}
+				} else if (co instanceof Session) {
+					session = (Session) co;
+				} else if (EffConnection.lastSession != null) {
+					session = EffConnection.lastSession;
+				} else {
+					SkEmail.error("You must to be login to a mail account before send an email.");
+					return;
+				}
+			} else if (EffConnection.lastSession != null) {
+				session = EffConnection.lastSession;
+			} else {
+				SkEmail.error("You must to be login to a mail account before send an email.");
+				return;
+			}
+			
+			Address[] addresses = rec != null ?
+					new Address[]{new InternetAddress(rec.getSingle(e))}
+					: emailObject.getAllRecipients();
+			
+			Transport.send(emailObject, addresses);
+			Transport transport = session.getTransport("smtp");
+			URLName urlname = transport.getURLName();
+			transport.addTransportListener(new MailTransport());
+			transport.connect(urlname.getHost(), urlname.getPort(), urlname.getUsername(), urlname.getPassword());
+			transport.sendMessage(emailObject, addresses);
+			transport.close();
+			lastEmailSent = emailObject;
+		
 		} catch (MessagingException e1) {
 			SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
 			SkEmail.error("If the problem persists, try to reload your server.");
@@ -64,24 +112,12 @@ public class EffSendEmail extends Effect {
 
 	@Override
 	public String toString(Event e, boolean debug) {
-		return "send " + email.toString(e, debug);
-	}
-
-	/*public static Message build() {
 		try {
-			Message message = new MimeMessage(session);
-			Multipart multipart = new MimeMultipart();
-			message.setFrom(ExprAuthorsOfEmail.emailAuthor);
-			message.setSubject(ExprObjectOfEmail.emailObject);
-			message.addRecipients(Message.RecipientType.TO, ExprReceiversOfEmail.emailReceivers);
-			multipart.addBodyPart(ExprBodyOfEmail.emailBody);
-			multipart.addBodyPart(ExprAttachFilesOfEmail.emailAttachments);
-			message.setContent(multipart);
-			return message;
-		} catch (MessagingException e) {
-			e.printStackTrace();
+			return "Send email " + email.getSingle(e).getContent().toString();
+		} catch (IOException | MessagingException e1) {
+			e1.printStackTrace();
 		}
-		
-	}*/
+		return null;
+	}
 	
 }

@@ -143,28 +143,56 @@ public class Email {
                 .defaultExpression(new EventValueExpression<>(Address.class))
                 .user("e?mail( |-|_)address")
                 .name("Address Type")
-                .parser(new Parser<Address>() {
-                
-                    @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-                
-                    @Override
-                    public Address parse( String arg0, ParseContext arg1) {
-                        return null;
-                    }
-                
-                    @Override
-                    public String toString( Address arg0, int arg1) {
-                        return null;
-                    }
-                
-                    @Override
-                    public String toVariableNameString( Address arg0) {
-                        return null;
-                    }
-                
-                }));
+				.parser(new Parser<Address>() {
+			
+					@Override
+					public String getVariableNamePattern() {
+						return ".+";
+					}
+			
+					@Override
+					public Address parse( String arg0, ParseContext arg1) {
+						return null;
+					}
+			
+					@Override
+					public String toString( Address arg0, int arg1) {
+						return null;
+					}
+			
+					@Override
+					public String toVariableNameString( Address arg0) {
+						return null;
+					}
+			
+				}));
+	
+		// Folder
+		Classes.registerClass(new ClassInfo<>(Folder.class, "folder")
+				.defaultExpression(new EventValueExpression<>(Folder.class))
+				.user("(folder|dir)")
+				.name("Folder Type")
+				.parser(new Parser<Folder>() {
+				
+					@Override
+					public String getVariableNamePattern() {
+						return ".+";
+					}
+				
+					@Override
+					public Folder parse( String arg0, ParseContext arg1 ) {
+						return null;
+					}
+				
+					@Override
+					public String toString( Folder arg0, int arg1 ) {
+						return null;
+					}
+				
+					@Override
+					public String toVariableNameString( Folder arg0 ) {
+						return null;
+					}
+				}));
     }
 }
