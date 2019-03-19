@@ -13,7 +13,7 @@ public class OnConnection implements Listener {
 	
 	@EventHandler
 	public void onConnection( ConnectionBukkit event ) {
-		System.out.println("DDDD");
+
 	}
 	
 }

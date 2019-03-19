@@ -3,22 +3,28 @@ package com.alexlew.skemail.events.bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import javax.mail.event.ConnectionEvent;
+import javax.mail.Message;
 
-public class ConnectionBukkit extends Event {
-	
+public class MailReceivedBukkit extends Event {
+
 	public static final HandlerList handlers = new HandlerList();
 
-	public ConnectionBukkit(ConnectionEvent connection) {
+	private Message message;
+
+	public MailReceivedBukkit(Message message) {
+		this.message = message;
 	}
-	
+
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
+	public Message getMessage() {
+		return message;
+	}
 }

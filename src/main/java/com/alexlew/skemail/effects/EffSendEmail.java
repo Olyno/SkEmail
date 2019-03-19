@@ -91,14 +91,20 @@ public class EffSendEmail extends Effect {
 			Address[] addresses = rec != null ?
 					new Address[]{new InternetAddress(rec.getSingle(e))}
 					: emailObject.getAllRecipients();
-			
-			Transport.send(emailObject, addresses);
+
 			Transport transport = session.getTransport("smtp");
-			URLName urlname = transport.getURLName();
 			transport.addTransportListener(new MailTransport());
-			transport.connect(urlname.getHost(), urlname.getPort(), urlname.getUsername(), urlname.getPassword());
+			URLName urlname = transport.getURLName();
+			transport.connect(
+					urlname.getHost(),
+					urlname.getPort(),
+					urlname.getUsername(),
+					urlname.getPassword()
+			);
+
 			transport.sendMessage(emailObject, addresses);
 			transport.close();
+
 			lastEmailSent = emailObject;
 		
 		} catch (MessagingException e1) {

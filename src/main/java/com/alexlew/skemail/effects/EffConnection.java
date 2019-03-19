@@ -69,8 +69,6 @@ public class EffConnection extends Effect {
 	@Override
 	protected void execute( Event e ) {
 		EmailService serviceType = service.getSingle(e);
-		String host = serviceType.getSmtp_address();
-		Integer port = Integer.parseInt(serviceType.getSmtp_port());
 		String username = id != null ? id.getSingle(e) : user.getSingle(e);
 		String password = pass.getSingle(e);
 		
@@ -81,30 +79,46 @@ public class EffConnection extends Effect {
 		if (!accounts.containsKey(username)) {
 			try {
 				Properties props = new Properties();
-				props.put("mail.smtp.host", host);
-				props.put("mail.smtp.socketFactory.port", port);
+
+				// SMTP
+				props.put("mail.smtp.host", serviceType.getSmtp_address());
+				props.put("mail.smtp.port", Integer.parseInt(serviceType.getSmtp_port()));
+				props.put("mail.smtp.socketFactory.port", Integer.parseInt(serviceType.getSmtp_port()));
 				props.put("mail.smtp.socketFactory.class",
 						"javax.net.ssl.SSLSocketFactory");
 				props.put("mail.smtp.auth", "true");
-				props.put("mail.smtp.port", port);
+
+				// IMAP
+				props.put("mail.imap.host", serviceType.getImap_address());
+				props.put("mail.imap.port", Integer.parseInt(serviceType.getImap_port()));
+				props.put("mail.imap.socketFactory.port", Integer.parseInt(serviceType.getImap_port()));
+				props.put("mail.imap.socketFactory.class",
+						"javax.net.ssl.SSLSocketFactory");
+				props.put("mail.imap.auth", "true");
 				
 				Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
 						return new PasswordAuthentication(username, password);
 					}
 				});
-				
+
 				Transport transport = session.getTransport("smtp");
-				transport.addConnectionListener(new MailConnection());
-				transport.connect(host, port, username, password);
-				
-				// If success
-				transport.close();
-				accounts.remove(username);
-				accounts.put(username, session);
-				lastSession = session;
-				if (varExpr != null) {
-					varExpr.change(e, new Object[]{session}, Changer.ChangeMode.SET);
+				if (!transport.isConnected()) {
+					transport.addConnectionListener(new MailConnection());
+					transport.connect(
+							serviceType.getSmtp_address(),
+							Integer.parseInt(serviceType.getSmtp_port()),
+							username,
+							password
+					);
+
+					transport.close();
+					accounts.remove(username);
+					accounts.put(username, session);
+					lastSession = session;
+					if (varExpr != null) {
+						varExpr.change(e, new Object[]{session}, Changer.ChangeMode.SET);
+					}
 				}
 				
 			} catch (AuthenticationFailedException e1) {
