@@ -1,6 +1,9 @@
 name: SkEmail
-description: Send email to someone!
+description: Send email to someone in real life!
 author: AlexLew
-version: 1.5
+version: 1.5-beta
 main: com.alexlew.skemail.SkEmail
 depend: [Skript]
+commands:
+    skemail:
+        description: All commands from SkEmail.

@@ -1,4 +1,4 @@
-package com.alexlew.skemail.expressions.EmailServices.custom;
+package com.alexlew.skemail.expressions.EmailServices;
 
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.Description;

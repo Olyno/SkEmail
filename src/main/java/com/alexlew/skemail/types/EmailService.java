@@ -5,6 +5,9 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
+import com.alexlew.skemail.SkEmail;
+
+import java.util.HashMap;
 
 public class EmailService {
 
@@ -39,6 +42,8 @@ public class EmailService {
                 }));
     }
 
+    public static HashMap<String, EmailService> services = new HashMap<>();
+
     private String name = "default";
     private String smtp_address = "smtp.gmail.com";
     private String smtp_port = "465";
@@ -48,6 +53,10 @@ public class EmailService {
     public static EmailService lastEmailService;
 
     public EmailService() { }
+
+    public EmailService(String name) {
+        this.name = name;
+    }
 
 
     public String getSmtp_address() {
@@ -63,8 +72,9 @@ public class EmailService {
     }
 
     public void setSmtp_port( Object smtp_port ) {
-        String port = (String) smtp_port;
-        this.smtp_port = port;
+        if (smtp_port instanceof Integer) this.smtp_port = smtp_port.toString();
+        else if (smtp_port instanceof String) this.smtp_port = (String) smtp_port;
+        else SkEmail.error("This SMTP Port is not an integer or string, but a " + smtp_port.getClass().getName());
     }
 
     public String getImap_address() {
@@ -80,8 +90,9 @@ public class EmailService {
     }
 
     public void setImap_port( Object imap_port ) {
-        String port = (String) imap_port;
-        this.imap_port = port;
+        if (imap_port instanceof Integer) this.imap_port = imap_port.toString();
+        else if (imap_port instanceof String) this.imap_port = (String) imap_port;
+        else SkEmail.error("This IMAP Port is not an integer or string, but a " + smtp_port.getClass().getName());
     }
 
     public String getName() {

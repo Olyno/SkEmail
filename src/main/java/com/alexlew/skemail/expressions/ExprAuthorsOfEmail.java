@@ -53,9 +53,8 @@ public class ExprAuthorsOfEmail extends SimpleExpression<Address> {
 		try {
 			return message.getSingle(e).getFrom();
 		} catch (MessagingException e1) {
-			e1.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	@Override
@@ -118,7 +117,7 @@ public class ExprAuthorsOfEmail extends SimpleExpression<Address> {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return null;
+		return "Authors of email";
 	}
 	
 }

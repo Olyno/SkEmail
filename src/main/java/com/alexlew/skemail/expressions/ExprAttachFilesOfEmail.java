@@ -122,8 +122,7 @@ public class ExprAttachFilesOfEmail extends SimpleExpression<String> {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		//return "attach file " + email.toString(e, debug);
-		return null;
+		return "Attached files";
 	}
 	
 }

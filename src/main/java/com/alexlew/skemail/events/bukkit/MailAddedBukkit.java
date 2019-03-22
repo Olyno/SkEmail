@@ -3,19 +3,17 @@ package com.alexlew.skemail.events.bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.event.MessageCountEvent;
 
-public class MailReceivedBukkit extends Event {
+public class MailAddedBukkit extends Event {
 
 	public static final HandlerList handlers = new HandlerList();
 
-	private Message message;
-	private Folder folder;
+	private Message[] messages;
 
-	public MailReceivedBukkit(Message message, Folder folder) {
-		this.message = message;
-		this.folder = folder;
+	public MailAddedBukkit(MessageCountEvent event) {
+		this.messages = event.getMessages();
 	}
 
 	public static HandlerList getHandlerList() {
@@ -27,11 +25,7 @@ public class MailReceivedBukkit extends Event {
 		return handlers;
 	}
 
-	public Message getMessage() {
-		return message;
-	}
-
-	public Folder getFolder() {
-		return folder;
+	public Message[] getMessages() {
+		return messages;
 	}
 }

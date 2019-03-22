@@ -15,12 +15,12 @@ import org.bukkit.event.Event;
 
 import javax.mail.Session;
 
-@Name("Last Email")
-@Description("Returns the email that was last made in a email scope")
+@Name("Last Connection")
+@Description("Returns the last account connected.")
 @Examples({
-		"set {_email} to the last email"
+		"set {_last session} to the last session"
 })
-@Since("1.0")
+@Since("1.5")
 
 public class ExprLastConnection extends SimpleExpression<Session> {
 	
@@ -51,7 +51,7 @@ public class ExprLastConnection extends SimpleExpression<Session> {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "the last connection";
+		return "The last connection";
 	}
 	
 }

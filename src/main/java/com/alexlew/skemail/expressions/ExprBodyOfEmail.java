@@ -1,10 +1,12 @@
 package com.alexlew.skemail.expressions;
 
-import org.bukkit.event.Event;
-
 import ch.njol.skript.classes.Changer.ChangeMode;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import org.bukkit.event.Event;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -34,7 +36,7 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<Message, String> {
 		try {
 			MimeMultipart multipart = (MimeMultipart) email.getContent();
 			for (int i = 0; i < multipart.getCount(); i++) {
-				if (multipart.getBodyPart(i).getContentType().equals("text/plain")) {
+				if (multipart.getBodyPart(i).getContentType().equals("text/html; charset=UTF-8")) {
 					return multipart.getBodyPart(i).getContent().toString();
 				}
 			}

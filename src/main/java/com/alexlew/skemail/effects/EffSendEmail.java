@@ -121,9 +121,8 @@ public class EffSendEmail extends Effect {
 		try {
 			return "Send email " + email.getSingle(e).getContent().toString();
 		} catch (IOException | MessagingException e1) {
-			e1.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 }

@@ -51,7 +51,7 @@ public class ExprLastEmailSent extends SimpleExpression<Message> {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "the last email sent";
+		return "The last email sent";
 	}
 	
 }

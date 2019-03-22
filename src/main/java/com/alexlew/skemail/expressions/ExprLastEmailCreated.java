@@ -15,7 +15,7 @@ import org.bukkit.event.Event;
 
 import javax.mail.Message;
 
-@Name("Last Email Sent")
+@Name("Last Email Created")
 @Description("Returns the email that was last made in a email scope")
 @Examples({
 		"set {_email} to the last email created"
@@ -51,7 +51,7 @@ public class ExprLastEmailCreated extends SimpleExpression<Message> {
 	
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return "the last email created";
+		return "The last email created";
 	}
 	
 }

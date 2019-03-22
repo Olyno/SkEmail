@@ -1,18 +1,18 @@
 package com.alexlew.skemail.expressions;
 
-import com.alexlew.skemail.effects.EffSendEmail;
-import org.bukkit.event.Event;
-
-import com.alexlew.skemail.scopes.ScopeEmailCreation;
-import com.alexlew.skemail.util.EffectSection;
-
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import com.alexlew.skemail.scopes.ScopeEmailCreation;
+import com.alexlew.skemail.util.EffectSection;
+import org.bukkit.event.Event;
 
 import javax.mail.Message;
 
@@ -39,7 +39,7 @@ public class ExprEmail extends SimpleExpression<Message>{
 
 	static {
 		Skript.registerExpression(ExprEmail.class, Message.class, ExpressionType.SIMPLE,
-				"[(the|an|[a] new)] [e]mail [(creator|build[er])]");
+				"[(the|an|[a] new|this|that)] [e]mail [(creator|build[er])]");
 	}
 
 	private boolean scope = false;
@@ -70,7 +70,7 @@ public class ExprEmail extends SimpleExpression<Message>{
 
 	@Override
 	public String toString(Event e, boolean debug) {
-		return "the email";
+		return "The email";
 	}
 }
 

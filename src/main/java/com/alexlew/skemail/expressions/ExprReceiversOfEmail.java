@@ -77,11 +77,23 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 			
 			switch (mode) {
 				case SET:
-					email.setRecipient(Message.RecipientType.TO, new InternetAddress((String) delta[0]));
+					if (delta.length > 1) {
+						email.setRecipients(Message.RecipientType.TO,
+								addresses.toArray(new InternetAddress[addresses.size()]));
+					} else {
+						email.setRecipient(Message.RecipientType.TO, new InternetAddress((String) delta[0]));
+					}
 					break;
 				case ADD:
 					for (Object o1 : delta) {
-						InternetAddress address = new InternetAddress((String) o1);
+						InternetAddress address = null;
+						if (o1 instanceof String) {
+							address = new InternetAddress((String) o1);
+						} else if (o1 instanceof InternetAddress) {
+							address = (InternetAddress) o1;
+						} else {
+							SkEmail.error("You can't add a receiver (recipient) of type " + o1.getClass().getName() + " because it's not a type String or InternetAddress.");
+						}
 						address.validate();
 						addresses.add(address);
 					}
@@ -89,7 +101,14 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 					break;
 				case REMOVE:
 					for (Object o : delta) {
-						InternetAddress address = new InternetAddress((String) o);
+						InternetAddress address = null;
+						if (o instanceof String) {
+							address = new InternetAddress((String) o);
+						} else if (o instanceof InternetAddress) {
+							address = (InternetAddress) o;
+						} else {
+							SkEmail.error("You can't add a receiver (recipient) of type " + o.getClass().getName() + " because it's not a type String or InternetAddress.");
+						}
 						address.validate();
 						addresses.remove(address);
 					}
@@ -118,7 +137,7 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 
 	@Override
 	public String toString( Event e, boolean debug ) {
-		return null;//return "receiver " + email.toString(e, debug);
+		return "Receivers of email";
 	}
 
 }

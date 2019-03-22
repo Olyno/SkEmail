@@ -6,6 +6,7 @@ import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import com.alexlew.skemail.SkEmail;
+import com.alexlew.skemail.effects.EffConnection;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
@@ -170,29 +171,65 @@ public class Email {
 		// Folder
 		Classes.registerClass(new ClassInfo<>(Folder.class, "folder")
 				.defaultExpression(new EventValueExpression<>(Folder.class))
-				.user("(folder|dir)")
+				.user("(folder|dir|box)")
 				.name("Folder Type")
 				.parser(new Parser<Folder>() {
-				
+
 					@Override
 					public String getVariableNamePattern() {
 						return ".+";
 					}
-				
+
 					@Override
-					public Folder parse( String arg0, ParseContext arg1 ) {
-						return null;
+					public Folder parse(String arg0, ParseContext arg1 ) {
+						try {
+							return EffConnection.lastSession.getStore("imap").getFolder(arg0);
+						} catch (MessagingException e) {
+							return null;
+						}
 					}
-				
+
 					@Override
-					public String toString( Folder arg0, int arg1 ) {
-						return null;
+					public String toString(Folder arg0, int arg1 ) {
+						return arg0.getName();
 					}
-				
+
 					@Override
-					public String toVariableNameString( Folder arg0 ) {
-						return null;
+					public String toVariableNameString(Folder arg0 ) {
+						return arg0.getName();
 					}
 				}));
-    }
+
+		// Recipient Type
+		Classes.registerClass(new ClassInfo<>(Message.RecipientType.class, "recipienttype")
+				.defaultExpression(new EventValueExpression<>(Message.RecipientType.class))
+				.user("recipient( |-)?(type)?")
+				.name("Recipient Type")
+				.parser(new Parser<Message.RecipientType>() {
+
+					@Override
+					public String getVariableNamePattern() {
+						return ".+";
+					}
+
+					@Override
+					public Message.RecipientType parse(String arg0, ParseContext arg1) {
+						if (arg0.toLowerCase().equals("to")) return Message.RecipientType.TO;
+						if (arg0.toLowerCase().equals("cc")) return Message.RecipientType.CC;
+						if (arg0.toLowerCase().equals("bcc")) return Message.RecipientType.BCC;
+						return null;
+					}
+
+					@Override
+					public String toString(Message.RecipientType arg0, int arg1) {
+						return arg0.toString();
+					}
+
+					@Override
+					public String toVariableNameString(Message.RecipientType arg0) {
+						return arg0.toString();
+					}
+				}));
+
+	}
 }
