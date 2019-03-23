@@ -4,6 +4,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
 
 [![](https://img.shields.io/github/issues/AlexLew95/SkEmail.svg?style=for-the-badge)](https://github.com/AlexLew95/SkEmail/issues) ![](https://img.shields.io/github/forks/AlexLew95/SkEmail.svg?style=for-the-badge) ![](https://img.shields.io/github/stars/AlexLew95/SkEmail.svg?style=for-the-badge)
+
 [Documentation](https://skripthub.net/docs/?addon=SkEmail) | [Source code](https://github.com/AlexLew95/SkEmail) | [Downloads](https://github.com/AlexLew95/SkEmail/releases) | [Any problem, suggestion, or issue? Say me here](https://github.com/AlexLew95/SkEmail/issues/new?template=bug_report.md)
 
 ## Disclaimer
