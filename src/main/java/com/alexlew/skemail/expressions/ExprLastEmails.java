@@ -32,8 +32,8 @@ public class ExprLastEmails extends SimpleExpression<Message> {
 
 	static {
 		Skript.registerExpression(ExprLastEmails.class, Message.class, ExpressionType.SIMPLE,
-				"last[ly] %integer% [e]mails [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]",
-				"[e]mails from %integer% to %integer% [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]"
+				"last[ly] %integer% [e]mail[s] [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]",
+				"[e]mail[s] from %integer% to %integer% [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]"
 		);
 	}
 

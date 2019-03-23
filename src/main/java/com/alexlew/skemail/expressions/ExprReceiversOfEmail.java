@@ -12,6 +12,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.alexlew.skemail.SkEmail;
+import com.alexlew.skemail.types.IAddress;
 import org.bukkit.event.Event;
 
 import javax.mail.Address;
@@ -61,7 +62,7 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 	@Override
 	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
 		if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE || mode == Changer.ChangeMode.DELETE) {
-			return new Class[]{String.class};
+			return new Class[]{Object.class};
 		}
 		return null;
 	}
@@ -70,49 +71,108 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
 		Message email = message.getSingle(e);
 		try {
-			List<Address> addresses = new LinkedList<>();
+			List<Address> addressesTo = new LinkedList<>();
+			List<Address> addressesCc = new LinkedList<>();
+			List<Address> addressesBcc = new LinkedList<>();
 			if (email.getRecipients(Message.RecipientType.TO) != null) {
-				addresses.addAll(Arrays.asList(email.getRecipients(Message.RecipientType.TO)));
+				addressesTo.addAll(Arrays.asList(email.getRecipients(Message.RecipientType.TO)));
+			}
+			if (email.getRecipients(Message.RecipientType.CC) != null) {
+				addressesCc.addAll(Arrays.asList(email.getRecipients(Message.RecipientType.CC)));
+			}
+			if (email.getRecipients(Message.RecipientType.BCC) != null) {
+				addressesBcc.addAll(Arrays.asList(email.getRecipients(Message.RecipientType.BCC)));
 			}
 			
 			switch (mode) {
 				case SET:
+					addressesTo = new LinkedList<>();
+					addressesCc = new LinkedList<>();
+					addressesBcc = new LinkedList<>();
 					if (delta.length > 1) {
+						for (Object o : delta) {
+							if (o instanceof String) {
+								addressesTo.add(new InternetAddress((String) o));
+							} else if (o instanceof IAddress) {
+								IAddress a = (IAddress) o;
+								if (a.getType() == Message.RecipientType.TO) {
+									addressesTo.add(a.getAddress());
+								} else if (a.getType() == Message.RecipientType.CC) {
+									addressesCc.add(a.getAddress());
+								} else if (a.getType() == Message.RecipientType.BCC) {
+									addressesBcc.add(a.getAddress());
+								}
+							}
+						}
 						email.setRecipients(Message.RecipientType.TO,
-								addresses.toArray(new InternetAddress[addresses.size()]));
+								addressesTo.toArray(new InternetAddress[addressesTo.size()]));
+						email.setRecipients(Message.RecipientType.CC,
+								addressesCc.toArray(new InternetAddress[addressesCc.size()]));
+						email.setRecipients(Message.RecipientType.BCC,
+								addressesBcc.toArray(new InternetAddress[addressesBcc.size()]));
 					} else {
-						email.setRecipient(Message.RecipientType.TO, new InternetAddress((String) delta[0]));
+						if (delta[0] instanceof String) {
+							email.setRecipient(Message.RecipientType.TO, new InternetAddress((String) delta[0]));
+						} else if (delta[0] instanceof IAddress) {
+							IAddress a = (IAddress) delta[0];
+							email.setRecipient(a.getType(), a.getAddress());
+						} else {
+							SkEmail.error("The type of this receiver is not a IAddress or a string, but a " + delta[0].getClass().getName());
+						}
 					}
 					break;
 				case ADD:
-					for (Object o1 : delta) {
-						InternetAddress address = null;
-						if (o1 instanceof String) {
-							address = new InternetAddress((String) o1);
-						} else if (o1 instanceof InternetAddress) {
-							address = (InternetAddress) o1;
+					for (Object o : delta) {
+						if (o instanceof String) {
+							InternetAddress address = new InternetAddress((String) o);
+							address.validate();
+							addressesTo.add(address);
+						} else if (o instanceof IAddress) {
+							IAddress a = (IAddress) o;
+							if (a.getType() == Message.RecipientType.TO) {
+								addressesTo.add(a.getAddress());
+							} else if (a.getType() == Message.RecipientType.CC) {
+								addressesCc.add(a.getAddress());
+							} else if (a.getType() == Message.RecipientType.BCC) {
+								addressesBcc.add(a.getAddress());
+							}
 						} else {
-							SkEmail.error("You can't add a receiver (recipient) of type " + o1.getClass().getName() + " because it's not a type String or InternetAddress.");
+							SkEmail.error("You can't add a receiver (recipient) of type " + o.getClass().getName() + " because it's not a type String or IAddress.");
 						}
-						address.validate();
-						addresses.add(address);
 					}
-					email.setRecipients(Message.RecipientType.TO, addresses.toArray(new InternetAddress[addresses.size()]));
+					email.setRecipients(Message.RecipientType.TO,
+							addressesTo.toArray(new InternetAddress[addressesTo.size()]));
+					email.setRecipients(Message.RecipientType.CC,
+							addressesCc.toArray(new InternetAddress[addressesCc.size()]));
+					email.setRecipients(Message.RecipientType.BCC,
+							addressesBcc.toArray(new InternetAddress[addressesBcc.size()]));
+
 					break;
 				case REMOVE:
 					for (Object o : delta) {
-						InternetAddress address = null;
 						if (o instanceof String) {
-							address = new InternetAddress((String) o);
-						} else if (o instanceof InternetAddress) {
-							address = (InternetAddress) o;
+							InternetAddress address = new InternetAddress((String) o);
+							address.validate();
+							addressesTo.remove(address);
+						} else if (o instanceof IAddress) {
+							IAddress a = (IAddress) o;
+							if (a.getType() == Message.RecipientType.TO) {
+								addressesTo.remove(a.getAddress());
+							} else if (a.getType() == Message.RecipientType.CC) {
+								addressesCc.remove(a.getAddress());
+							} else if (a.getType() == Message.RecipientType.BCC) {
+								addressesBcc.remove(a.getAddress());
+							}
 						} else {
-							SkEmail.error("You can't add a receiver (recipient) of type " + o.getClass().getName() + " because it's not a type String or InternetAddress.");
+							SkEmail.error("You can't add a receiver (recipient) of type " + o.getClass().getName() + " because it's not a type String or IAddress.");
 						}
-						address.validate();
-						addresses.remove(address);
 					}
-					email.setRecipients(Message.RecipientType.TO, addresses.toArray(new InternetAddress[addresses.size()]));
+					email.setRecipients(Message.RecipientType.TO,
+							addressesTo.toArray(new InternetAddress[addressesTo.size()]));
+					email.setRecipients(Message.RecipientType.CC,
+							addressesCc.toArray(new InternetAddress[addressesCc.size()]));
+					email.setRecipients(Message.RecipientType.BCC,
+							addressesBcc.toArray(new InternetAddress[addressesBcc.size()]));
 					break;
 				case DELETE:
 					email.setRecipient(Message.RecipientType.TO, null);
@@ -121,7 +181,7 @@ public class ExprReceiversOfEmail extends SimpleExpression<Address> {
 					break;
 			}
 		} catch (AddressException e1) {
-			SkEmail.error("This email address is incorrect: " + delta[0]);
+			SkEmail.error("This email address is not valid: " + delta[0]);
 		} catch (MessagingException ignored) { }
 	}
 
