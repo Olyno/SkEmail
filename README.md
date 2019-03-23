@@ -57,3 +57,16 @@ login to name of your service service from mail "youremail@gmail.com" and passwo
 If your mail service seems good, you will get the message ``[SkEmail] Service named "name of your service" has been loaded!``.
 
 To reload SkEmail or services, you needn't reload all your server, you can use ``/skemail reload``, it's enough.
+
+## BStats/Metrics
+
+SkEmail contains metrics for stats, available here:
+https://bstats.org/plugin/bukkit/SkEmail
+
+## Nightly Builds
+
+SkEmail contains "Nightly Builds" (development builds). They are often unstable and may have missing or unfinished features. However, if you want to test these versions, you can find this version here:
+
+**Direct download:** https://bitbucket.org/AlexLew95/skemail/downloads/SkEmail-1.5-all.jar
+
+**Link:** https://bitbucket.org/AlexLew95/skemail/src
