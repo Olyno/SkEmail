@@ -39,7 +39,7 @@ processResources {
 }
 
 dependencies {
-    implementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.14.3-pre4-SNAPSHOT'
     implementation 'ch.njol:skript:2.2-SNAPSHOT'
     implementation 'com.sun.mail:javax.mail:1.6.2'
 }
