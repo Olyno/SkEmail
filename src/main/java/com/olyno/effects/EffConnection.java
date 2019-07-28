@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Variable;
@@ -14,6 +13,7 @@ import ch.njol.util.Kleenean;
 import com.olyno.SkEmail;
 import com.olyno.events.javaxmail.MailConnection;
 import com.olyno.types.EmailService;
+import com.olyno.util.AsyncEffect;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.event.Event;
 
@@ -28,7 +28,7 @@ import java.util.Properties;
 })
 @Since("1.0")
 
-public class EffConnection extends Effect {
+public class EffConnection extends AsyncEffect {
 
     public static HashMap<String, Session> accounts = new HashMap<>();
     public static Session lastSession;

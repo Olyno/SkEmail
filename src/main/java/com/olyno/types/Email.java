@@ -213,10 +213,10 @@ public class Email {
                     }
 
                     @Override
-                    public Message.RecipientType parse(String arg0, ParseContext arg1) {
-                        if (arg0.toLowerCase().equals("to")) return Message.RecipientType.TO;
-                        if (arg0.toLowerCase().equals("cc")) return Message.RecipientType.CC;
-                        if (arg0.toLowerCase().equals("bcc")) return Message.RecipientType.BCC;
+                    public Message.RecipientType parse(String type, ParseContext arg1) {
+                        if (type.toLowerCase().equals("to")) return Message.RecipientType.TO;
+                        if (type.toLowerCase().equals("cc")) return Message.RecipientType.CC;
+                        if (type.toLowerCase().equals("bcc")) return Message.RecipientType.BCC;
                         return null;
                     }
 

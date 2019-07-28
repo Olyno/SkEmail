@@ -1,6 +1,10 @@
 package com.olyno.expressions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +17,13 @@ import org.bukkit.event.Event;
 import javax.mail.Message;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+
+@Name("IAddress")
+@Description("Returns a internet address from a string.")
+@Examples({
+        ""
+})
+@Since("1.5")
 
 public class ExprIAddress extends SimpleExpression<IAddress> {
 

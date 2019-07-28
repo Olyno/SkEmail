@@ -5,11 +5,11 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.olyno.SkEmail;
+import com.olyno.util.AsyncEffect;
 import org.bukkit.event.Event;
 
 import javax.mail.MessagingException;
@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 })
 @Since("1.5")
 
-public class EffDisconnection extends Effect {
+public class EffDisconnection extends AsyncEffect {
 
     static {
         Skript.registerEffect(EffDisconnection.class,

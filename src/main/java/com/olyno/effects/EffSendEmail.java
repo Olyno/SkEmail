@@ -5,12 +5,12 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.olyno.SkEmail;
 import com.olyno.events.javaxmail.MailTransport;
+import com.olyno.util.AsyncEffect;
 import org.bukkit.event.Event;
 
 import javax.mail.*;
@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 })
 @Since("1.0")
 
-public class EffSendEmail extends Effect {
+public class EffSendEmail extends AsyncEffect {
 
     public static Message lastEmailSent;
 
