@@ -4,13 +4,21 @@ pipelines:
   default:
     - step:
         name: BitBucket Pipeline SkEmail
-        deployment: test
+        deployment: Update
         caches:
           - gradle
           - gradlewrapper
         script:
           - bash ./gradlew shadowjar
           - curl -X POST "https://${BB_AUTH_STRING}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"./build/libs/SkEmail-1.6-all.jar"
+    - step:
+        name: Deploy code to Github
+        deployment: Deploy to Github
+        script:
+          - git config --global user.email "${GITHUB_EMAIl}"
+          - git config --global user.name "Olyno"
+          - git remote add origin https://Olyno:${GITHUB_TOKEN}@github.com/Olyno/SkEmail.git
+          - git push origin master
 
 definitions:
   caches:
