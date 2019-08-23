@@ -3,7 +3,7 @@ image: openjdk:11
 pipelines:
   default:
     - step:
-        name: BitBucket Pipeline SkEmail
+        name: Create new version of SkEmail
         deployment: Update
         caches:
           - gradle
@@ -17,7 +17,7 @@ pipelines:
         script:
           - git config --global user.email "${GITHUB_EMAIl}"
           - git config --global user.name "Olyno"
-          - git remote add origin https://Olyno:${GITHUB_TOKEN}@github.com/Olyno/SkEmail.git
+          - git remote set-url origin https://Olyno:${GITHUB_TOKEN}@github.com/Olyno/SkEmail.git
           - git push origin master
 
 definitions:
