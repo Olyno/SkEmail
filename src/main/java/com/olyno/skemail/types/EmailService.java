@@ -33,13 +33,13 @@ public class EmailService {
                     }
 
                     @Override
-                    public String toString(EmailService arg0, int arg1) {
-                        return null;
+                    public String toString(EmailService service, int arg1) {
+                        return service.getName();
                     }
 
                     @Override
-                    public String toVariableNameString(EmailService arg0) {
-                        return null;
+                    public String toVariableNameString(EmailService service) {
+                        return service.getName();
                     }
 
                 }));

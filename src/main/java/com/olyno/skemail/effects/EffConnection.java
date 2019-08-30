@@ -75,55 +75,58 @@ public class EffConnection extends AsyncEffect {
         }
 
         if (!accounts.containsKey(username)) {
-            try {
-                Properties props = new Properties();
 
-                // SMTP
-                props.put("mail.smtp.host", serviceType.getSmtp_address());
-                props.put("mail.smtp.port", Integer.parseInt(serviceType.getSmtp_port()));
-                props.put("mail.smtp.socketFactory.port", Integer.parseInt(serviceType.getSmtp_port()));
-                props.put("mail.smtp.socketFactory.class",
-                        "javax.net.ssl.SSLSocketFactory");
-                props.put("mail.smtp.auth", "true");
+            executeCode(e, () -> {
+                try {
+                    Properties props = new Properties();
 
-                // IMAP
-                props.put("mail.imap.host", serviceType.getImap_address());
-                props.put("mail.imap.port", Integer.parseInt(serviceType.getImap_port()));
-                props.put("mail.imap.socketFactory.port", Integer.parseInt(serviceType.getImap_port()));
-                props.put("mail.imap.socketFactory.class",
-                        "javax.net.ssl.SSLSocketFactory");
-                props.put("mail.imap.auth", "true");
+                    // SMTP
+                    props.put("mail.smtp.host", serviceType.getSmtp_address());
+                    props.put("mail.smtp.port", Integer.parseInt(serviceType.getSmtp_port()));
+                    props.put("mail.smtp.socketFactory.port", Integer.parseInt(serviceType.getSmtp_port()));
+                    props.put("mail.smtp.socketFactory.class",
+                            "javax.net.ssl.SSLSocketFactory");
+                    props.put("mail.smtp.auth", "true");
 
-                Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                    // IMAP
+                    props.put("mail.imap.host", serviceType.getImap_address());
+                    props.put("mail.imap.port", Integer.parseInt(serviceType.getImap_port()));
+                    props.put("mail.imap.socketFactory.port", Integer.parseInt(serviceType.getImap_port()));
+                    props.put("mail.imap.socketFactory.class",
+                            "javax.net.ssl.SSLSocketFactory");
+                    props.put("mail.imap.auth", "true");
+
+                    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
+
+                    Transport transport = session.getTransport("smtp");
+                    if (!transport.isConnected()) {
+                        transport.addConnectionListener(new MailConnection());
+                        transport.connect(
+                                serviceType.getSmtp_address(),
+                                Integer.parseInt(serviceType.getSmtp_port()),
+                                username,
+                                password
+                        );
+
+                        transport.close();
+                        accounts.remove(username);
+                        accounts.put(username, session);
+                        lastSession = session;
+                        if (varExpr != null) {
+                            varExpr.change(e, new Object[]{session}, Changer.ChangeMode.SET);
+                        }
                     }
-                });
 
-                Transport transport = session.getTransport("smtp");
-                if (!transport.isConnected()) {
-                    transport.addConnectionListener(new MailConnection());
-                    transport.connect(
-                            serviceType.getSmtp_address(),
-                            Integer.parseInt(serviceType.getSmtp_port()),
-                            username,
-                            password
-                    );
-
-                    transport.close();
-                    accounts.remove(username);
-                    accounts.put(username, session);
-                    lastSession = session;
-                    if (varExpr != null) {
-                        varExpr.change(e, new Object[]{session}, Changer.ChangeMode.SET);
-                    }
+                } catch (AuthenticationFailedException e1) {
+                    SkEmail.error("You used a wrong mail address or password. Please check them. Else try to see if \"Less secure app access\" is turned on.");
+                } catch (MessagingException e2) {
+                    SkEmail.error("Impossible to connect to your mail box. Try to restart your server.");
                 }
-
-            } catch (AuthenticationFailedException e1) {
-                SkEmail.error("You used a wrong mail address or password. Please check them. Else try to see if \"Less secure app access\" is turned on.");
-            } catch (MessagingException e2) {
-                SkEmail.error("Impossible to connect to your mail box. Try to restart your server.");
-            }
+            });
 
         }
     }

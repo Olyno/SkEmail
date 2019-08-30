@@ -6,7 +6,6 @@ import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.effects.EffConnection;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
@@ -36,11 +35,11 @@ public class Email {
                     }
 
                     @Override
-                    public String toString(Message arg0, int arg1) {
+                    public String toString(Message email, int arg1) {
                         try {
-                            StringBuilder back = new StringBuilder(arg0.getSubject() + "\n");
-                            if (arg0.getSize() > 0 && arg0.getContent() != null) {
-                                Multipart multipart = (MimeMultipart) arg0.getContent();
+                            StringBuilder back = new StringBuilder(email.getSubject() + "\n");
+                            if (email.getSize() > 0 && email.getContent() != null) {
+                                Multipart multipart = (MimeMultipart) email.getContent();
                                 if (multipart.getCount() > 0) {
                                     for (int i = 0; i < multipart.getCount(); i++) {
                                         back.append(multipart.getBodyPart(i).getContent()).append("\n");
@@ -50,8 +49,7 @@ public class Email {
 
                             return back.toString();
 
-                        } catch (MessagingException | IOException e) {
-                            e.printStackTrace();
+                        } catch (MessagingException | IOException ignore) {
                         }
                         return null;
                     }
@@ -76,29 +74,28 @@ public class Email {
                     }
 
                     @Override
-                    public InternetAddress parse(String arg0, ParseContext arg1) {
+                    public InternetAddress parse(String internetAddress, ParseContext arg1) {
                         try {
-                            InternetAddress address = new InternetAddress(arg0);
+                            InternetAddress address = new InternetAddress(internetAddress);
                             address.validate();
                             return address;
                         } catch (AddressException e) {
-                            SkEmail.error("This email address is incorrect: " + arg0);
+                            SkEmail.error("This email address is incorrect: " + internetAddress);
                         }
                         return null;
                     }
 
                     @Override
-                    public String toString(InternetAddress arg0, int arg1) {
-                        return arg0.getAddress();
+                    public String toString(InternetAddress internetAddress, int arg1) {
+                        return internetAddress.getAddress();
                     }
 
                     @Override
-                    public String toVariableNameString(InternetAddress arg0) {
-                        return arg0.getAddress();
+                    public String toVariableNameString(InternetAddress internetAddress) {
+                        return internetAddress.getAddress();
                     }
 
                 }));
-
 
         // Session
         Classes.registerClass(new ClassInfo<>(Session.class, "session")
@@ -118,21 +115,19 @@ public class Email {
                     }
 
                     @Override
-                    public String toString(Session arg0, int arg1) {
+                    public String toString(Session session, int arg1) {
                         try {
-                            return arg0.getTransport("smtp").getURLName().getUsername();
-                        } catch (NoSuchProviderException e) {
-                            e.printStackTrace();
+                            return session.getTransport("smtp").getURLName().getUsername();
+                        } catch (NoSuchProviderException ignore) {
                         }
                         return null;
                     }
 
                     @Override
-                    public String toVariableNameString(Session arg0) {
+                    public String toVariableNameString(Session session) {
                         try {
-                            return arg0.getTransport("smtp").getURLName().getUsername();
-                        } catch (NoSuchProviderException e) {
-                            e.printStackTrace();
+                            return session.getTransport("smtp").getURLName().getUsername();
+                        } catch (NoSuchProviderException ignore) {
                         }
                         return null;
                     }
@@ -157,13 +152,13 @@ public class Email {
                     }
 
                     @Override
-                    public String toString(Address arg0, int arg1) {
-                        return null;
+                    public String toString(Address address, int arg1) {
+                        return address.toString();
                     }
 
                     @Override
-                    public String toVariableNameString(Address arg0) {
-                        return null;
+                    public String toVariableNameString(Address address) {
+                        return address.toString();
                     }
 
                 }));
@@ -171,7 +166,7 @@ public class Email {
         // Folder
         Classes.registerClass(new ClassInfo<>(Folder.class, "folder")
                 .defaultExpression(new EventValueExpression<>(Folder.class))
-                .user("(folder|dir|box)")
+                .user("folder|dir|box")
                 .name("Folder Type")
                 .parser(new Parser<Folder>() {
 
@@ -181,22 +176,18 @@ public class Email {
                     }
 
                     @Override
-                    public Folder parse(String arg0, ParseContext arg1) {
-                        try {
-                            return EffConnection.lastSession.getStore("imap").getFolder(arg0);
-                        } catch (MessagingException e) {
-                            return null;
-                        }
+                    public Folder parse(String folder, ParseContext arg1) {
+                        return null;
                     }
 
                     @Override
-                    public String toString(Folder arg0, int arg1) {
-                        return arg0.getName();
+                    public String toString(Folder folder, int arg1) {
+                        return folder.getName();
                     }
 
                     @Override
-                    public String toVariableNameString(Folder arg0) {
-                        return arg0.getName();
+                    public String toVariableNameString(Folder folder) {
+                        return folder.getName();
                     }
                 }));
 
@@ -221,13 +212,13 @@ public class Email {
                     }
 
                     @Override
-                    public String toString(Message.RecipientType arg0, int arg1) {
-                        return arg0.toString();
+                    public String toString(Message.RecipientType recipientType, int arg1) {
+                        return recipientType.toString();
                     }
 
                     @Override
-                    public String toVariableNameString(Message.RecipientType arg0) {
-                        return arg0.toString();
+                    public String toVariableNameString(Message.RecipientType recipientType) {
+                        return recipientType.toString();
                     }
                 }));
 

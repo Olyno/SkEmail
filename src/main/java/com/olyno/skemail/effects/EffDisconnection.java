@@ -13,6 +13,7 @@ import com.olyno.skemail.util.AsyncEffect;
 import org.bukkit.event.Event;
 
 import javax.mail.MessagingException;
+import java.util.concurrent.CompletionException;
 
 @Name("Disconnection")
 @Description("Disconnection from one of your connected account.")
@@ -43,12 +44,14 @@ public class EffDisconnection extends AsyncEffect {
         String account = login.getSingle(e);
         if (account.replaceAll(" ", "") != "") {
             if (EffConnection.accounts.containsKey(account)) {
-                try {
-                    EffConnection.accounts.get(account).getTransport().close();
-                    EffConnection.accounts.remove(account);
-                } catch (MessagingException e1) {
-                    e1.printStackTrace();
-                }
+                executeCode(e, () -> {
+                    try {
+                        EffConnection.accounts.get(account).getTransport().close();
+                        EffConnection.accounts.remove(account);
+                    } catch (MessagingException ex) {
+                        throw new CompletionException(ex);
+                    }
+                });
             }
         } else {
             SkEmail.error("You must to put a email address to remove it from all connected mails.");

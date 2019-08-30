@@ -58,61 +58,63 @@ public class EffSendEmail extends AsyncEffect {
     @Override
     protected void execute(Event e) {
         Message emailObject = email.getSingle(e);
-        Session session = null;
 
-        try {
+        executeCode(e, () -> {
+            try {
+                Session session = null;
+                Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
-            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-
-            if (connection != null) {
-                Object co = connection.getSingle(e);
-                if (co instanceof String) {
-                    if (EffConnection.accounts.containsKey(co)) {
-                        session = EffConnection.accounts.get(co);
+                if (connection != null) {
+                    Object co = connection.getSingle(e);
+                    if (co instanceof String) {
+                        if (EffConnection.accounts.containsKey(co)) {
+                            session = EffConnection.accounts.get(co);
+                        } else {
+                            SkEmail.error("This account is not connected: " + co);
+                        }
+                    } else if (co instanceof Session) {
+                        session = (Session) co;
+                    } else if (EffConnection.lastSession != null) {
+                        session = EffConnection.lastSession;
                     } else {
-                        SkEmail.error("This account is not connected: " + co);
+                        SkEmail.error("You must to be login to a mail account before send an email.");
+                        return;
                     }
-                } else if (co instanceof Session) {
-                    session = (Session) co;
                 } else if (EffConnection.lastSession != null) {
                     session = EffConnection.lastSession;
                 } else {
                     SkEmail.error("You must to be login to a mail account before send an email.");
                     return;
                 }
-            } else if (EffConnection.lastSession != null) {
-                session = EffConnection.lastSession;
-            } else {
-                SkEmail.error("You must to be login to a mail account before send an email.");
-                return;
+
+                Address[] addresses = rec != null ?
+                        new Address[]{new InternetAddress(rec.getSingle(e))}
+                        : emailObject.getAllRecipients();
+
+                Transport transport = session.getTransport("smtp");
+                transport.addTransportListener(new MailTransport());
+                URLName urlname = transport.getURLName();
+                transport.connect(
+                        urlname.getHost(),
+                        urlname.getPort(),
+                        urlname.getUsername(),
+                        urlname.getPassword()
+                );
+
+                transport.sendMessage(emailObject, addresses);
+                transport.close();
+
+                lastEmailSent = emailObject;
+
+            } catch (MessagingException e1) {
+                SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
+                SkEmail.error("If the problem persists, try to reload your server.");
+                e1.printStackTrace();
+            } catch (IllegalStateException e1) {
+                SkEmail.error("Impossible to connect to your mail box to send your email. Try to restart your server.");
             }
+        });
 
-            Address[] addresses = rec != null ?
-                    new Address[]{new InternetAddress(rec.getSingle(e))}
-                    : emailObject.getAllRecipients();
-
-            Transport transport = session.getTransport("smtp");
-            transport.addTransportListener(new MailTransport());
-            URLName urlname = transport.getURLName();
-            transport.connect(
-                    urlname.getHost(),
-                    urlname.getPort(),
-                    urlname.getUsername(),
-                    urlname.getPassword()
-            );
-
-            transport.sendMessage(emailObject, addresses);
-            transport.close();
-
-            lastEmailSent = emailObject;
-
-        } catch (MessagingException e1) {
-            SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
-            SkEmail.error("If the problem persists, try to reload your server.");
-            e1.printStackTrace();
-        } catch (IllegalStateException e1) {
-            SkEmail.error("Impossible to connect to your mail box to send your email. Try to restart your server.");
-        }
     }
 
     @Override

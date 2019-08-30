@@ -31,13 +31,13 @@ public class IAddress {
                     }
 
                     @Override
-                    public String toString(IAddress arg0, int arg1) {
-                        return null;
+                    public String toString(IAddress address, int arg1) {
+                        return address.getAddress().getAddress();
                     }
 
                     @Override
-                    public String toVariableNameString(IAddress arg0) {
-                        return null;
+                    public String toVariableNameString(IAddress address) {
+                        return address.getAddress().getAddress();
                     }
 
                 }));

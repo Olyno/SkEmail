@@ -29,7 +29,7 @@ command send:
             set body of email to "Look my beautiful email my friend!"
             set receiver of email to "myfriend@gmail.com"
             add "plugins/myfile.txt" to attachments of email
-        send last email
+        send last email created
      
 command read:
     trigger:
