@@ -22,4 +22,4 @@ pipelines:
 
 definitions:
   caches:
-    gradlewrapper: ~/.gradle/wrapper 
+    gradlewrapper: ~/.gradle/wrapper
