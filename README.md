@@ -3,7 +3,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
 
-[![](https://img.shields.io/github/issues/Olyno/SkEmail.svg?style=for-the-badge)](https://github.com/Olyno/SkEmail/issues) ![](https://img.shields.io/github/forks/Olyno/SkEmail.svg?style=for-the-badge) ![](https://img.shields.io/github/stars/Olyno/SkEmail.svg?style=for-the-badge)
+[![](https://img.shields.io/github/issues/Olyno/SkEmail.svg?style=for-the-badge)](https://github.com/Olyno/SkEmail/issues) ![](https://img.shields.io/github/forks/Olyno/SkEmail.svg?style=for-the-badge) ![](https://img.shields.io/github/stars/Olyno/SkEmail.svg?style=for-the-badge) ![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/Olyno/skemail?label=Bitbucket%20build&style=for-the-badge)
 
 [Documentation](https://skripthub.net/docs/?addon=SkEmail) | [Source code](https://github.com/Olyno/SkEmail) | [Downloads](https://github.com/Olyno/SkEmail/releases) | [Any problem, suggestion, or issue? Say me here](https://github.com/Olyno/SkEmail/issues/new?template=bug_report.md)
 
