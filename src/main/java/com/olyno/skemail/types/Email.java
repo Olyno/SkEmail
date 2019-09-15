@@ -5,10 +5,8 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-import com.olyno.skemail.SkEmail;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
@@ -75,13 +73,6 @@ public class Email {
 
                     @Override
                     public InternetAddress parse(String internetAddress, ParseContext arg1) {
-                        try {
-                            InternetAddress address = new InternetAddress(internetAddress);
-                            address.validate();
-                            return address;
-                        } catch (AddressException e) {
-                            SkEmail.error("This email address is incorrect: " + internetAddress);
-                        }
                         return null;
                     }
 
@@ -205,9 +196,6 @@ public class Email {
 
                     @Override
                     public Message.RecipientType parse(String type, ParseContext arg1) {
-                        if (type.toLowerCase().equals("to")) return Message.RecipientType.TO;
-                        if (type.toLowerCase().equals("cc")) return Message.RecipientType.CC;
-                        if (type.toLowerCase().equals("bcc")) return Message.RecipientType.BCC;
                         return null;
                     }
 
