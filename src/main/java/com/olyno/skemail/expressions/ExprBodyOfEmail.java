@@ -34,13 +34,17 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<Message, String> {
     @Override
     public String convert(Message email) {
         try {
-            MimeMultipart multipart = (MimeMultipart) email.getContent();
-            for (int i = 0; i < multipart.getCount(); i++) {
-                if (multipart.getBodyPart(i).getContentType().equals("text/html; charset=UTF-8")) {
-                    return multipart.getBodyPart(i).getContent().toString();
+            StringBuilder back = new StringBuilder("");
+            if (email.getSize() > 0 && email.getContent() != null) {
+                Multipart multipart = (MimeMultipart) email.getContent();
+                if (multipart.getCount() > 0) {
+                    for (int i = 0; i < multipart.getCount(); i++) {
+                        back.append(multipart.getBodyPart(i).getContent()).append("\n");
+                    }
                 }
             }
-            return null;
+
+            return back.toString().isEmpty() ? null : back.toString();
 
         } catch (IOException | MessagingException e1) {
             return null;
