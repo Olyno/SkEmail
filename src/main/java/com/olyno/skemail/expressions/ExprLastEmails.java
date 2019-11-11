@@ -32,7 +32,7 @@ public class ExprLastEmails extends SimpleExpression<Message> {
 
     static {
         Skript.registerExpression(ExprLastEmails.class, Message.class, ExpressionType.SIMPLE,
-                "last[ly] %integer% [e]mail[s] [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]",
+                "last[ly] [%-integer%] [e]mail[s] [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]",
                 "[e]mail[s] from %integer% to %integer% [in [(folder|dir)] (%-string%|%-folder%)] [(using|with) (%-session%|%-string%)]"
         );
     }
@@ -46,7 +46,7 @@ public class ExprLastEmails extends SimpleExpression<Message> {
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         if (matchedPattern == 0) {
-            start = (Expression<Integer>) expr[0];
+            end = (Expression<Integer>) expr[0];
             dir = (Expression<Object>) expr[1];
             connection = (Expression<Object>) expr[2];
         } else {
@@ -64,6 +64,7 @@ public class ExprLastEmails extends SimpleExpression<Message> {
         Session session = EffConnection.lastSession;
         String folderName = "INBOX";
         Integer startN = start != null ? start.getSingle(e) : 0;
+        Integer endN = end != null ? end.getSingle(e) : -1;
 
         // Define the folder name if not null
         if (dir != null) {
@@ -106,28 +107,17 @@ public class ExprLastEmails extends SimpleExpression<Message> {
             Folder inbox = store.getFolder(folderName);
             inbox.open(Folder.READ_ONLY);
 
-            if (end != null) {
-                if (end.getSingle(e) > 0 && end.getSingle(e) > startN) {
-                    Message[] messages = inbox.getMessages(startN, end.getSingle(e));
-                    ArrayUtils.reverse(messages);
-                    return messages;
-                } else {
-                    SkEmail.error("You can only retrieve the last emails in a given order, and can't be equal to 0. The end cannot be before the beginning (" + end.getSingle(e) + " = 0 or > " + startN + ")");
-                }
-            } else if (startN > 0) {
-                Message[] messages = new Message[startN];
-                for (int i = 0; i < startN; i++) {
-                    messages[i] = inbox.getMessages()[i];
-                }
-                ArrayUtils.reverse(messages);
-                return messages;
-            } else {
+            if (endN == -1) {
                 Message[] messages = inbox.getMessages();
                 ArrayUtils.reverse(messages);
                 return messages;
             }
 
-            return null;
+            Message[] messages = new Message[endN - startN];
+            for (int i = startN; i < endN; i++) {
+                messages[i] = inbox.getMessage(inbox.getMessageCount() - i);
+            }
+            return messages;
 
         } catch (MessagingException e1) {
             e1.printStackTrace();
