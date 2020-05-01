@@ -10,14 +10,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.reflections.Reflections;
+import com.olyno.skemail.util.PackageFilter;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class SkEmail extends JavaPlugin {
 
-    static SkEmail instance;
+    public static SkEmail instance;
     private static File dataFolder;
     private static InputStream serviceResource;
     public List<Registration> expressions = new ArrayList<>();
@@ -143,17 +144,15 @@ public class SkEmail extends JavaPlugin {
         }));
 
         // Register events
-        Reflections reflections = new Reflections("com.olyno.skemail.skript.events");
-        Set<Class<? extends Listener>> events = reflections.getSubTypesOf(Listener.class);
-        events.forEach(
-                (event) -> {
-                    try {
-                        Listener evt = event.getDeclaredConstructor().newInstance();
-                        getServer().getPluginManager().registerEvents(evt, this);
-                    } catch (Exception ignored) {
-                    }
-                }
-        );
+        try {
+			List<Class<Listener>> classes = new PackageFilter<Listener>("com.olyno.skemail.skript.events.bukkit").getClasses();
+			for (Class<Listener> event : classes) {
+				Listener evt = event.getDeclaredConstructor().newInstance();
+				getServer().getPluginManager().registerEvents(evt, this);
+			}
+		} catch (IOException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
 
         // Register Commands
         getCommand("skemail").setExecutor(new Commands(this));
