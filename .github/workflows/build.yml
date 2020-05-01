@@ -1,0 +1,27 @@
+name: Build SkEmail
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build SkEmail
+        run: ./gradlew shadowJar
+
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v1
+        if: success()
+        with:
+          name: skemail-nightly
+          path: build/libs/SkEmail-1.7-all.jar
