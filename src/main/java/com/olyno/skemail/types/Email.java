@@ -11,6 +11,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 
+import static com.olyno.skemail.Utils.getTextFromMessage;
+
 public class Email {
 
     static {
@@ -35,21 +37,12 @@ public class Email {
                     @Override
                     public String toString(Message email, int arg1) {
                         try {
-                            StringBuilder back = new StringBuilder(email.getSubject() + "\n");
-                            if (email.getSize() > 0 && email.getContent() != null) {
-                                Multipart multipart = (MimeMultipart) email.getContent();
-                                if (multipart.getCount() > 0) {
-                                    for (int i = 0; i < multipart.getCount(); i++) {
-                                        back.append(multipart.getBodyPart(i).getContent()).append("\n");
-                                    }
-                                }
-                            }
-
-                            return back.toString();
+                            String result = getTextFromMessage(email);
+                            return result.isEmpty() ? null : result;
 
                         } catch (MessagingException | IOException ignore) {
+                            return null;
                         }
-                        return null;
                     }
 
                     @Override

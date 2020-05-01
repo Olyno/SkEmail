@@ -16,6 +16,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 
+import static com.olyno.skemail.Utils.getTextFromMessage;
+
 @Name("Body of Email")
 @Description("Returns the body of an email. Can be set in a email scope")
 @Examples({
@@ -34,14 +36,8 @@ public class ExprBodyOfEmail extends SimplePropertyExpression<Message, String> {
     @Override
     public String convert(Message email) {
         try {
-            MimeMultipart multipart = (MimeMultipart) email.getContent();
-            for (int i = 0; i < multipart.getCount(); i++) {
-                if (multipart.getBodyPart(i).getContentType().equals("text/html; charset=UTF-8")) {
-                    return multipart.getBodyPart(i).getContent().toString();
-                }
-            }
-            return null;
-
+            String result = getTextFromMessage(email);
+            return result.isEmpty() ? null : result;
         } catch (IOException | MessagingException e1) {
             return null;
         }
