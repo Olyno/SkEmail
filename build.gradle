@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.olyno.skemail'
-version '1.7'
+version '1.7.1'
 
 sourceCompatibility = 1.8
 
