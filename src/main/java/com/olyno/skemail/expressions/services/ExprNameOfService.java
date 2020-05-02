@@ -21,7 +21,7 @@ public class ExprNameOfService extends SimplePropertyExpression<EmailService, St
 
     static {
         register(ExprNameOfService.class, String.class,
-                "name", "emailservice");
+                "service name", "emailservice");
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExprNameOfService extends SimplePropertyExpression<EmailService, St
 
     @Override
     protected String getPropertyName() {
-        return "name";
+        return "service name";
     }
 
     @Override
