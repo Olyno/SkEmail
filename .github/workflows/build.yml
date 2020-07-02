@@ -27,4 +27,4 @@ jobs:
         if: success()
         with:
           name: skemail-nightly
-          path: build/libs/SkEmail-*-all.jar
+          path: build/libs/SkEmail-all.jar
