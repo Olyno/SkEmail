@@ -15,7 +15,7 @@ public class EvtMails {
 
     static {
         Skript.registerEvent("Email Received Event", SimpleEvent.class, MailReceivedBukkit.class,
-            "[e]mail (sent|transport)"
+            "[e]mail receive[d]"
         );
 
         EventValues.registerEventValue(MailReceivedBukkit.class, Message.class, new Getter<Message, MailReceivedBukkit>() {
