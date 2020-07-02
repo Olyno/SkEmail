@@ -4,3 +4,6 @@
 /out/
 /bin/
 /.vscode/
+/.settings/
+.project
+.classpath
