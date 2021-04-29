@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.sun.mail:jakarta.mail
+    versions:
+    - 2.0.0
+  - dependency-name: com.github.johnrengelman.shadow
+    versions:
+    - 6.1.0
