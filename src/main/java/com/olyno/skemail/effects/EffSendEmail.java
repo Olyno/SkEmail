@@ -1,5 +1,19 @@
 package com.olyno.skemail.effects;
 
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.URLName;
+import javax.mail.internet.InternetAddress;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.events.javaxmail.MailTransport;
+import com.olyno.skemail.util.AsyncEffect;
+
+import org.bukkit.event.Event;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -8,13 +22,6 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.events.javaxmail.MailTransport;
-import com.olyno.skemail.util.AsyncEffect;
-import org.bukkit.event.Event;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
 
 @Name("Send Email")
 @Description("Send an email")
@@ -107,7 +114,7 @@ public class EffSendEmail extends AsyncEffect {
                 lastEmailSent = emailObject;
 
             } catch (MessagingException e1) {
-                SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/AlexLew95/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
+                SkEmail.error("An error occurred. Try to check this link and retry: https://github.com/Olyno/SkEmail/wiki/Configure-your-email-address-for-SkEmail");
                 SkEmail.error("If the problem persists, try to reload your server.");
                 e1.printStackTrace();
             } catch (IllegalStateException e1) {
