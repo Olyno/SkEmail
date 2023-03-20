@@ -2,8 +2,8 @@ package com.olyno.skemail.events.javaxmail;
 
 import com.olyno.skemail.events.bukkit.TransportBukkit;
 
-import javax.mail.event.TransportEvent;
-import javax.mail.event.TransportListener;
+import jakarta.mail.event.TransportEvent;
+import jakarta.mail.event.TransportListener;
 
 public class MailTransport implements TransportListener {
 

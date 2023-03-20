@@ -20,7 +20,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
     compileOnly 'com.github.SkriptLang:Skript:2.5.3'
-    implementation 'com.sun.mail:jakarta.mail:1.6.5'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
 }
 
 processResources {

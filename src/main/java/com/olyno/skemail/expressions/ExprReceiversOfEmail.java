@@ -1,5 +1,14 @@
 package com.olyno.skemail.expressions;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.types.IAddress;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
@@ -11,18 +20,11 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.types.IAddress;
-import org.bukkit.event.Event;
-
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 
 @Name("Receiver/Recipients of Email")
 @Description("Returns the receivers/recipients of an email. Can be set in a email scope")

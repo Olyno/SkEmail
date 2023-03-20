@@ -1,23 +1,32 @@
 package com.olyno.skemail;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.SkriptAddon;
-import com.olyno.skemail.types.EmailService;
-import com.olyno.skemail.util.Registration;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.olyno.skemail.types.EmailService;
 import com.olyno.skemail.util.PackageFilter;
+import com.olyno.skemail.util.Registration;
 
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
+import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAddon;
+import jakarta.activation.CommandMap;
+import jakarta.activation.MailcapCommandMap;
 
 public class SkEmail extends JavaPlugin {
 

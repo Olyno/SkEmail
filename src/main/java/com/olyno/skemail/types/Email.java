@@ -1,17 +1,21 @@
 package com.olyno.skemail.types;
 
+import static com.olyno.skemail.Utils.getTextFromMessage;
+
+import java.io.IOException;
+
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-
-import static com.olyno.skemail.Utils.getTextFromMessage;
+import jakarta.mail.Address;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.NoSuchProviderException;
+import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
 
 public class Email {
 

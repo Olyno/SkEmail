@@ -1,15 +1,15 @@
 package com.olyno.skemail.expressions;
 
+import org.bukkit.event.Event;
+
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import org.bukkit.event.Event;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
 
 @Name("Object of Email")
 @Description("Returns the object of an email. Can be set in a email scope")

@@ -5,8 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-import javax.mail.Folder;
-import javax.mail.event.FolderEvent;
+import jakarta.mail.Folder;
+import jakarta.mail.event.FolderEvent;
 
 public class FolderRenamedBukkit extends Event implements Listener {
 

@@ -1,5 +1,9 @@
 package com.olyno.skemail.expressions;
 
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.effects.EffConnection;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -10,10 +14,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.effects.EffConnection;
-import org.bukkit.event.Event;
-
-import javax.mail.Session;
+import jakarta.mail.Session;
 
 @Name("Last Connection")
 @Description("Returns the last account connected.")

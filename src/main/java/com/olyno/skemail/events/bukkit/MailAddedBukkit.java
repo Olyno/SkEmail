@@ -5,8 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-import javax.mail.Message;
-import javax.mail.event.MessageCountEvent;
+import jakarta.mail.Message;
+import jakarta.mail.event.MessageCountEvent;
 
 public class MailAddedBukkit extends Event implements Listener {
 

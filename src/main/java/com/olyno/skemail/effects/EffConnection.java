@@ -1,5 +1,16 @@
 package com.olyno.skemail.effects;
 
+import java.util.HashMap;
+import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.events.javaxmail.MailConnection;
+import com.olyno.skemail.types.EmailService;
+import com.olyno.skemail.util.AsyncEffect;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
@@ -10,16 +21,11 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Variable;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.events.javaxmail.MailConnection;
-import com.olyno.skemail.types.EmailService;
-import com.olyno.skemail.util.AsyncEffect;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.event.Event;
-
-import javax.mail.*;
-import java.util.HashMap;
-import java.util.Properties;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 
 @Name("Connection")
 @Description("Connect to your email account.")
@@ -85,7 +91,7 @@ public class EffConnection extends AsyncEffect {
                     props.put("mail.smtp.port", Integer.parseInt(serviceType.getSmtp_port()));
                     props.put("mail.smtp.socketFactory.port", Integer.parseInt(serviceType.getSmtp_port()));
                     props.put("mail.smtp.socketFactory.class",
-                            "javax.net.ssl.SSLSocketFactory");
+                            "jakarta.net.ssl.SSLSocketFactory");
                     props.put("mail.smtp.auth", "true");
 
                     // IMAP
@@ -93,10 +99,10 @@ public class EffConnection extends AsyncEffect {
                     props.put("mail.imap.port", Integer.parseInt(serviceType.getImap_port()));
                     props.put("mail.imap.socketFactory.port", Integer.parseInt(serviceType.getImap_port()));
                     props.put("mail.imap.socketFactory.class",
-                            "javax.net.ssl.SSLSocketFactory");
+                            "jakarta.net.ssl.SSLSocketFactory");
                     props.put("mail.imap.auth", "true");
 
-                    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                    Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {
                             return new PasswordAuthentication(username, password);
                         }

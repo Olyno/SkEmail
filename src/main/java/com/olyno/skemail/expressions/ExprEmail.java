@@ -1,5 +1,10 @@
 package com.olyno.skemail.expressions;
 
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.scopes.ScopeEmailCreation;
+import com.olyno.skemail.util.EffectSection;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -10,11 +15,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.scopes.ScopeEmailCreation;
-import com.olyno.skemail.util.EffectSection;
-import org.bukkit.event.Event;
-
-import javax.mail.Message;
+import jakarta.mail.Message;
 
 @Name("Email expression")
 @Description("If it isn't inside an email scope, this expression returns a new Email. " +

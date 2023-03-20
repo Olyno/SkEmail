@@ -1,5 +1,13 @@
 package com.olyno.skemail.scopes;
 
+import java.util.ArrayList;
+
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.effects.EffConnection;
+import com.olyno.skemail.expressions.ExprAttachFilesOfEmail;
+import com.olyno.skemail.util.EffectSection;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -8,15 +16,9 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.effects.EffConnection;
-import com.olyno.skemail.expressions.ExprAttachFilesOfEmail;
-import com.olyno.skemail.util.EffectSection;
-import org.bukkit.event.Event;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
+import jakarta.mail.Message;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 
 @Name("Scope Email Creation")
 @Description("Scope for mail creation")

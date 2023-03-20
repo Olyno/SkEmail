@@ -5,8 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-import javax.mail.Message;
-import javax.mail.event.TransportEvent;
+import jakarta.mail.Message;
+import jakarta.mail.event.TransportEvent;
 
 public class TransportBukkit extends Event implements Listener {
 

@@ -1,5 +1,9 @@
 package com.olyno.skemail.expressions;
 
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.scopes.ScopeEmailCreation;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -10,10 +14,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.scopes.ScopeEmailCreation;
-import org.bukkit.event.Event;
-
-import javax.mail.Message;
+import jakarta.mail.Message;
 
 @Name("Last Email Created")
 @Description("Returns the email that was last made in a email scope")

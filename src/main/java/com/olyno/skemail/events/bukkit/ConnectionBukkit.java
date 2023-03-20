@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-import javax.mail.event.ConnectionEvent;
+import jakarta.mail.event.ConnectionEvent;
 
 public class ConnectionBukkit extends Event implements Listener {
 

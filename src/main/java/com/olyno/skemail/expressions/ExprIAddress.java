@@ -1,5 +1,10 @@
 package com.olyno.skemail.expressions;
 
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.types.IAddress;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -10,13 +15,9 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.types.IAddress;
-import org.bukkit.event.Event;
-
-import javax.mail.Message;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.Message;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 
 @Name("IAddress")
 @Description("Returns a internet address from a string.")

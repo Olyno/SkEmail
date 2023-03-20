@@ -3,8 +3,8 @@ package com.olyno.skemail.events.javaxmail;
 import com.olyno.skemail.events.bukkit.ConnectionBukkit;
 import com.olyno.skemail.events.bukkit.DisconnectionBukkit;
 
-import javax.mail.event.ConnectionEvent;
-import javax.mail.event.ConnectionListener;
+import jakarta.mail.event.ConnectionEvent;
+import jakarta.mail.event.ConnectionListener;
 
 public class MailConnection implements ConnectionListener {
 

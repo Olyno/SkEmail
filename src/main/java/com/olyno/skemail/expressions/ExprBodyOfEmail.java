@@ -1,22 +1,23 @@
 package com.olyno.skemail.expressions;
 
+import static com.olyno.skemail.Utils.getTextFromMessage;
+
+import java.io.IOException;
+
+import org.bukkit.event.Event;
+
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import org.bukkit.event.Event;
-
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-
-import static com.olyno.skemail.Utils.getTextFromMessage;
+import jakarta.mail.BodyPart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMultipart;
 
 @Name("Body of Email")
 @Description("Returns the body of an email. Can be set in a email scope")

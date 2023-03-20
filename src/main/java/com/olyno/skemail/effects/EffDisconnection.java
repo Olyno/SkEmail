@@ -1,5 +1,12 @@
 package com.olyno.skemail.effects;
 
+import java.util.concurrent.CompletionException;
+
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.util.AsyncEffect;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -8,12 +15,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.util.AsyncEffect;
-import org.bukkit.event.Event;
-
-import javax.mail.MessagingException;
-import java.util.concurrent.CompletionException;
+import jakarta.mail.MessagingException;
 
 @Name("Disconnection")
 @Description("Disconnection from one of your connected account.")

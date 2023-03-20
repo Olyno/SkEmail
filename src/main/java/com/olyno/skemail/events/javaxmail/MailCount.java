@@ -3,8 +3,8 @@ package com.olyno.skemail.events.javaxmail;
 import com.olyno.skemail.events.bukkit.MailAddedBukkit;
 import com.olyno.skemail.events.bukkit.MailRemovedBukkit;
 
-import javax.mail.event.MessageCountEvent;
-import javax.mail.event.MessageCountListener;
+import jakarta.mail.event.MessageCountEvent;
+import jakarta.mail.event.MessageCountListener;
 
 public class MailCount implements MessageCountListener {
 

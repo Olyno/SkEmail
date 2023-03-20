@@ -4,8 +4,8 @@ import com.olyno.skemail.events.bukkit.FolderCreatedBukkit;
 import com.olyno.skemail.events.bukkit.FolderDeletedBukkit;
 import com.olyno.skemail.events.bukkit.FolderRenamedBukkit;
 
-import javax.mail.event.FolderEvent;
-import javax.mail.event.FolderListener;
+import jakarta.mail.event.FolderEvent;
+import jakarta.mail.event.FolderListener;
 
 public class MailFolder implements FolderListener {
 

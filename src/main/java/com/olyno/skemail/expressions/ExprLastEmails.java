@@ -1,5 +1,12 @@
 package com.olyno.skemail.expressions;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.event.Event;
+
+import com.olyno.skemail.SkEmail;
+import com.olyno.skemail.effects.EffConnection;
+import com.olyno.skemail.events.javaxmail.MailFolder;
+
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -10,13 +17,12 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.olyno.skemail.SkEmail;
-import com.olyno.skemail.effects.EffConnection;
-import com.olyno.skemail.events.javaxmail.MailFolder;
-import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.event.Event;
-
-import javax.mail.*;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.URLName;
 
 @Name("Last Emails")
 @Description("Return last received mails in a box.")

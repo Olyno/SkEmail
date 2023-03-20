@@ -1,14 +1,14 @@
 package com.olyno.skemail.events.skript;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.lang.util.SimpleEvent;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import com.olyno.skemail.events.bukkit.FolderCreatedBukkit;
 import com.olyno.skemail.events.bukkit.FolderDeletedBukkit;
 import com.olyno.skemail.events.bukkit.FolderRenamedBukkit;
 
-import javax.mail.Folder;
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.util.SimpleEvent;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
+import jakarta.mail.Folder;
 
 public class EvtFolder {
 

@@ -1,18 +1,10 @@
 package com.olyno.skemail.effects;
 
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.URLName;
-import javax.mail.internet.InternetAddress;
+import org.bukkit.event.Event;
 
 import com.olyno.skemail.SkEmail;
 import com.olyno.skemail.events.javaxmail.MailTransport;
 import com.olyno.skemail.util.AsyncEffect;
-
-import org.bukkit.event.Event;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -22,6 +14,13 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.URLName;
+import jakarta.mail.internet.InternetAddress;
 
 @Name("Send Email")
 @Description("Send an email")
