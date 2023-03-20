@@ -11,7 +11,7 @@ repositories {
     mavenCentral()
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
-    maven { url 'https://maven.njol.ch/repo/' }
+    maven { url 'https://repo.skriptlang.org/releases' }
     maven { url 'https://repo.destroystokyo.com/repository/maven-public/' }
     maven { url 'https://maven.sk89q.com/repo' }
     maven { url 'https://jitpack.io' }
