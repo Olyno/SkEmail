@@ -86,18 +86,14 @@ public class EffConnection extends AsyncEffect {
                 // SMTP
                 props.put("mail.smtp.host", serviceType.getSmtp_address());
                 props.put("mail.smtp.port", Integer.parseInt(serviceType.getSmtp_port()));
-                props.put("mail.smtp.socketFactory.port", Integer.parseInt(serviceType.getSmtp_port()));
-                props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                props.put("mail.smtp.auth", "true");
                 props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.auth", "true");
 
                 // IMAP
                 props.put("mail.imap.host", serviceType.getImap_address());
                 props.put("mail.imap.port", Integer.parseInt(serviceType.getImap_port()));
-                props.put("mail.imap.socketFactory.port", Integer.parseInt(serviceType.getImap_port()));
-                props.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                props.put("mail.imap.auth", "true");
-                props.put("mail.imap.starttls.enable", "true");
+                props.put("mail.imap.ssl.enable", "true");
+                props.put("mail.imap.auth.login.disable", "true");
 
                 Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -114,9 +110,7 @@ public class EffConnection extends AsyncEffect {
                             username,
                             password
                     );
-
                     transport.close();
-                    accounts.remove(username);
                     accounts.put(username, session);
                     lastSession = session;
                     if (varExpr != null) {

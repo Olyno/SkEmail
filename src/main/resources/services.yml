@@ -2,84 +2,57 @@
 
 # Add your mails services here. There are default mails services.
 
-# The Gmail Service
 Gmail:
   name: gmail
   smtp_address: smtp.gmail.com
-  smtp_port: 465
+  smtp_port: 587
   imap_address: imap.gmail.com
   imap_port: 993
-
-# The GMX Service
-Gmx:
-  name: gmx
-  smtp_address: smtp.gmx.com
-  smtp_port: 465
-  imap_address: imap.gmx.com
-  imap_port: 993
-
-# The Hotmail Service
-Hotmail:
-  name: hotmail
-  smtp_address: smtp-mail.outlook.com
+  
+Yahoo:
+  name: yahoo
+  smtp_address: smtp.mail.yahoo.com
   smtp_port: 587
-  imap_address: imap-mail.outlook.com
+  imap_address: imap.mail.yahoo.com
   imap_port: 993
-
-# The NTL Service
-Ntl:
-  name: ntl
-  smtp_address: smtp.ntlworld.com
-  smtp_port: 465
-  imap_address: imap.ntlworld.com
+  starttls: true
+  
+Outlook:
+  name: outlook
+  smtp_address: smtp.office365.com
+  smtp_port: 587
+  imap_address: outlook.office365.com
   imap_port: 993
-
-# The Post Office Service
-PostOffice:
-  name: post office
-  smtp_address: smtp.postoffice.net
-  smtp_port: 465
-  imap_address: imap.postoffice.net
-  imap_port: 993
-
-# The Zoho Service
+  starttls: true
+  
 Zoho:
   name: zoho
   smtp_address: smtp.zoho.com
-  smtp_port: 465
+  smtp_port: 587
   imap_address: imap.zoho.com
   imap_port: 993
-
-# ========= YAHOO SERVICES =========
-
-# The ATT Service
-ATT:
-  name: att
-  smtp_address: smtp.att.yahoo.com
-  smtp_port: 465
-  imap_address: imap.att.yahoo.com
+  starttls: true
+  
+GMX:
+  name: gmx
+  smtp_address: mail.gmx.com
+  smtp_port: 587
+  imap_address: imap.gmx.com
   imap_port: 993
-
-# The Yahoo Australian Service
-YahooAustralian:
-  name: yahoo australian
-  smtp_address: smtp.mail.yahoo.au
-  smtp_port: 465
-  imap_address: imap.mail.yahoo.au
+  starttls: true
+  
+NTL:
+  name: ntl
+  smtp_address: smtp.ntlworld.com
+  smtp_port: 587
+  imap_address: imap.ntlworld.com
   imap_port: 993
-
-# The Yahoo United Kingdom Service
-YahooUnitedKingdom:
-  name: yahoo united kingdom
-  smtp_address: smtp.mail.yahoo.co.uk
-  smtp_port: 465
-  imap_address: imap.mail.yahoo.co.uk
+  starttls: true
+  
+AOL:
+  name: aol
+  smtp_address: smtp.aol.com
+  smtp_port: 587
+  imap_address: imap.aol.com
   imap_port: 993
-
-# The Yahoo Plus Service
-YahooPlus:
-  name: yahoo plus
-  smtp_address: plus.smtp.mail.yahoo.com
-  smtp_port: 465
-  imap_address: plus.imap.mail.yahoo.com
-  imap_port: 993
+  starttls: true
