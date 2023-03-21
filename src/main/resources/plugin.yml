@@ -1,7 +1,7 @@
 name: SkEmail
 description: Send email to someone in real life!
 author: Olyno
-version: "1.8"
+version: "2.0"
 main: com.olyno.skemail.SkEmail
 depend:
   - Skript
