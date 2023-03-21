@@ -3,7 +3,6 @@ package com.olyno.skemail.expressions;
 import org.bukkit.event.Event;
 
 import com.olyno.skemail.scopes.ScopeEmailCreation;
-import com.olyno.skemail.util.EffectSection;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -40,22 +39,26 @@ public class ExprEmail extends SimpleExpression<Message> {
 
     static {
         Skript.registerExpression(ExprEmail.class, Message.class, ExpressionType.SIMPLE,
-                "[(the|an|[a] new|this|that)] [e]mail [(creator|build[er])]");
+                "[(the|an|1¦[a] new|this|that)] [e]mail [(creator|build[er])]");
     }
 
-    private boolean scope = false;
+    private boolean isInScope = false;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult arg3) {
-        scope = EffectSection.isCurrentSection(ScopeEmailCreation.class);
-        return scope;
+    public boolean init(Expression<?>[] expr, int arg1, Kleenean arg2, ParseResult parseResult) {
+        boolean isNew = parseResult.mark == 1;
+        isInScope = getParser().isCurrentSection(ScopeEmailCreation.class);
+        if (isNew && !isInScope) {
+			Skript.error("You can only use the 'email' expression inside a 'create message' section");
+			return false;
+		}
+        return true;
     }
 
     @Override
     protected Message[] get(Event e) {
         return new Message[]{
-                scope ? ScopeEmailCreation.lastEmail : null
+            isInScope ? ScopeEmailCreation.lastEmail : null
         };
     }
 

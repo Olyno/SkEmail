@@ -13,13 +13,12 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
     maven { url 'https://repo.skriptlang.org/releases' }
     maven { url 'https://repo.destroystokyo.com/repository/maven-public/' }
-    maven { url 'https://maven.sk89q.com/repo' }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
-    compileOnly 'com.github.SkriptLang:Skript:2.5.3'
+    compileOnly 'com.github.SkriptLang:Skript:2.6.3'
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
 }
 

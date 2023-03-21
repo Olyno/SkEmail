@@ -31,6 +31,7 @@ import jakarta.activation.MailcapCommandMap;
 public class SkEmail extends JavaPlugin {
 
     public static SkEmail instance;
+	public static FileConfiguration config;
     private static File dataFolder;
     private static InputStream serviceResource;
     public List<Registration> expressions = new ArrayList<>();
@@ -181,6 +182,12 @@ public class SkEmail extends JavaPlugin {
         // Register Data
         dataFolder = getDataFolder();
         serviceResource = getResource("services.yml");
+
+        if (!getDataFolder().exists()) {
+			saveDefaultConfig();
+		}
+
+        config = getConfig();
 
         // Load Services
         loadServices();

@@ -29,11 +29,6 @@ public class Email {
                 .parser(new Parser<Message>() {
 
                     @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-
-                    @Override
                     public Message parse(String arg0, ParseContext arg1) {
                         return null;
                     }
@@ -64,11 +59,6 @@ public class Email {
                 .parser(new Parser<InternetAddress>() {
 
                     @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-
-                    @Override
                     public InternetAddress parse(String internetAddress, ParseContext arg1) {
                         return null;
                     }
@@ -91,11 +81,6 @@ public class Email {
                 .user("e?mail( |-|_)session")
                 .name("Session Type")
                 .parser(new Parser<Session>() {
-
-                    @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
 
                     @Override
                     public Session parse(String arg0, ParseContext arg1) {
@@ -130,11 +115,6 @@ public class Email {
                 .parser(new Parser<Address>() {
 
                     @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-
-                    @Override
                     public Address parse(String arg0, ParseContext arg1) {
                         return null;
                     }
@@ -159,11 +139,6 @@ public class Email {
                 .parser(new Parser<Folder>() {
 
                     @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-
-                    @Override
                     public Folder parse(String folder, ParseContext arg1) {
                         return null;
                     }
@@ -185,11 +160,6 @@ public class Email {
                 .user("recipient( |-)?(type)?")
                 .name("Recipient Type")
                 .parser(new Parser<Message.RecipientType>() {
-
-                    @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
 
                     @Override
                     public Message.RecipientType parse(String type, ParseContext arg1) {

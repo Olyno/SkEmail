@@ -21,11 +21,6 @@ public class IAddress {
                 .parser(new Parser<IAddress>() {
 
                     @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
-
-                    @Override
                     public IAddress parse(String arg0, ParseContext arg1) {
                         return null;
                     }

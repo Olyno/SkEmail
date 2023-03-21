@@ -1,13 +1,14 @@
 package com.olyno.skemail.types;
 
+import java.util.HashMap;
+
+import com.olyno.skemail.SkEmail;
+
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-import com.olyno.skemail.SkEmail;
-
-import java.util.HashMap;
 
 public class EmailService {
 
@@ -21,11 +22,6 @@ public class EmailService {
                 .name("Email Service")
                 .description("A email service like Gmail. Store smtp and imap, port and address.")
                 .parser(new Parser<EmailService>() {
-
-                    @Override
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }
 
                     @Override
                     public EmailService parse(String arg0, ParseContext arg1) {
