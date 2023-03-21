@@ -1,94 +1,71 @@
 package com.olyno.skemail.util;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.effects.Delay;
-import ch.njol.skript.lang.Effect;
-import ch.njol.skript.lang.TriggerItem;
-import ch.njol.skript.variables.Variables;
-import com.olyno.skemail.SkEmail;
-import org.bukkit.Bukkit;
+import java.util.stream.Stream;
+
 import org.bukkit.event.Event;
 
-import java.util.concurrent.CompletableFuture;
+import com.olyno.skemail.SkEmail;
 
-/**
- * This is *not* similar to Skript's AsyncEffect class.
- * This just provides some utility for local variable stuff.
- * Only the delay stuff works if the Variables methods aren't available.
- *
- * @author Blueyescat <https://github.com/Blueyescat>
- */
-public abstract class AsyncEffect extends Effect {
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.variables.Variables;
+import ch.njol.util.Kleenean;
 
-    private static boolean CAN_MANAGE_LOCAL_VARS = Skript.methodExists(Variables.class, "removeLocals", Event.class) &&
-            Skript.methodExists(Variables.class, "setLocalVariables", Event.class, Object.class);
+public abstract class AsyncEffect extends Effect implements Runnable {
 
-    private Object localVars;
+    enum AsyncKeyword {
+        NONE,
+        SYNC,
+        ASYNC;
+    }
+
+    private Event event;
+    private AsyncKeyword asyncKeyword;
+    private boolean isDefaultAsync = SkEmail.config.getBoolean("is_default_async");
+
+    private Object variables;
+
+    protected abstract void executeAsync(Event e);
+    protected abstract boolean initAsync(Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult);
+
+    protected static <E extends Effect> void registerAsyncEffect(final Class<E> effect, final String... patterns) {
+        Skript.registerEffect(
+            effect,
+            Stream.of(patterns)
+                .map(pattern -> "[(1¦sync|2¦async)] " + pattern)
+                .toArray(String[]::new)
+        );
+    }    
 
     @Override
-    protected TriggerItem walk(Event e) {
-        debug(e, true);
-        Delay.addDelayedEvent(e);
-        execute(e);
-        return null;
+    public boolean init(Expression<?>[] expr, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+        asyncKeyword = AsyncKeyword.values()[parseResult.mark];
+        return initAsync(expr, matchedPattern, isDelayed, parseResult);
     }
 
-    protected void executeCode(Event e, Runnable asyncCode) {
-        executeCode(e, asyncCode, () -> {
-        });
+    @Override
+    protected void execute(Event e) {
+        this.event = e;
+        boolean isAsync = asyncKeyword.equals(AsyncKeyword.ASYNC)
+            || (asyncKeyword.equals(AsyncKeyword.NONE) && isDefaultAsync);
+        if (isAsync) {
+            variables = Variables.removeLocals(this.event);
+            Thread effect = new Thread(this);
+            effect.setName(this.toString());
+            effect.start();
+        } else {
+            run();
+        }
     }
 
-    protected void executeCode(Event e, Runnable asyncCode, Runnable syncCode) {
-        removeAndSaveLocals(e);
-        CompletableFuture.supplyAsync(() -> {
-            asyncCode.run();
-            return true;
-        }).whenComplete((result, ex) -> Bukkit.getScheduler().runTask(SkEmail.getInstance(), () -> {
-            if (ex != null) {
-                putLocalsBackAndContinueTrigger(e);
-                Skript.exception(ex);
-                return;
-            }
-            if (!result) {
-                putLocalsBackAndContinueTrigger(e);
-                return;
-            }
-            syncCode.run();
-            if (shouldContinue()) {
-                putLocalsBack(e);
-                continueTriggerAndRemoveLocals(e);
-            }
-        }));
+    @Override
+    public void run() {
+        if (variables != null) {
+            Variables.setLocalVariables(this.event, variables);
+        }
+        executeAsync(this.event);
     }
-
-    protected void removeAndSaveLocals(Event e) {
-        if (CAN_MANAGE_LOCAL_VARS)
-            localVars = Variables.removeLocals(e);
-    }
-
-    protected void putLocalsBack(Event e) {
-        if (CAN_MANAGE_LOCAL_VARS && localVars != null)
-            Variables.setLocalVariables(e, localVars);
-    }
-
-    protected boolean shouldContinue() {
-        return getNext() != null;
-    }
-
-    protected void continueTrigger(Event e) {
-        TriggerItem.walk(getNext(), e);
-    }
-
-    protected void continueTriggerAndRemoveLocals(Event e) {
-        continueTrigger(e);
-        if (CAN_MANAGE_LOCAL_VARS)
-            Variables.removeLocals(e);
-    }
-
-    protected void putLocalsBackAndContinueTrigger(Event e) {
-        if (CAN_MANAGE_LOCAL_VARS)
-            putLocalsBack(e);
-        continueTrigger(e);
-    }
-
+  
 }
