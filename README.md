@@ -3,18 +3,14 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
 
-[![](https://img.shields.io/github/issues/Olyno/SkEmail.svg?style=for-the-badge)](https://github.com/Olyno/SkEmail/issues) ![](https://img.shields.io/github/forks/Olyno/SkEmail.svg?style=for-the-badge) ![](https://img.shields.io/github/stars/Olyno/SkEmail.svg?style=for-the-badge) ![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/Olyno/skemail?label=Bitbucket%20build&style=for-the-badge)
+[![](https://img.shields.io/github/issues/Olyno/SkEmail.svg?style=for-the-badge)](https://github.com/Olyno/SkEmail/issues) ![](https://img.shields.io/github/forks/Olyno/SkEmail.svg?style=for-the-badge) ![](https://img.shields.io/github/stars/Olyno/SkEmail.svg?style=for-the-badge)
 
 [Documentation](https://skripthub.net/docs/?addon=SkEmail) | [Source code](https://github.com/Olyno/SkEmail) | [Downloads](https://github.com/Olyno/SkEmail/releases) | [Any problem, suggestion, or issue? Say me here](https://github.com/Olyno/SkEmail/issues/new?template=bug_report.md)
 
 ## Disclaimer
 
 I'm in no way responsible for your actions with my tool.
-This ressource will not work correctly if:
-- Your gmail account (or other service account) has double factor enable
-- You didn't enable "Allow less secure apps"
-Think to follow this tuto to be sure you forgot nothing: https://github.com/Olyno/SkEmail/wiki/Configure-your-email-address-for-SkEmail
-I will only help you with the last version, and not older version. Think to update it.
+This ressource will not work for Gmail accounts if you don't use an [App Password](https://support.google.com/mail/answer/185833?hl=en) instead of your account password.
 
 ## Usage example
 
@@ -50,6 +46,8 @@ IdOfYourService:
     imap_port: 993
 ```
 
+> **Note:** Since SkEmail 2.0, the addon is using ``STARTTLS`` encryption instead of SSL/TLS. The most part of smtp servers support this encryption method with the smtp port 587. Don't forget to do this change, or see with your provider how it is managed.
+
 The name of your service will be used as pattern. With the example above:
 ```
 login to name of your service service from mail "youremail@gmail.com" and password "your password"
@@ -59,15 +57,19 @@ If your mail service seems good, you will get the message ``[SkEmail] Service na
 
 To reload SkEmail or services, you needn't reload all your server, you can use ``/skemail reload``, it's enough.
 
+## Default services
+
+SkEmail supports some providers by default. Note that i personnaly don't use all of them, so if you have any problem with one of them, please open an issue. Here is the list of the default services:
+
+- Gmail
+- Yahoo
+- Outlook (Hotmail)
+- Zoho
+- GMX
+- NTL
+- AOL
+
 ## BStats/Metrics
 
 SkEmail contains metrics for stats, available here:
 https://bstats.org/plugin/bukkit/SkEmail
-
-## Nightly Builds
-
-SkEmail contains "Nightly Builds" (development builds). They are often unstable and may have missing or unfinished features. However, if you want to test these versions, you can find this version here:
-
-**Direct download:** https://bitbucket.org/Olyno/skemail/downloads/SkEmail-1.5-all.jar
-
-**Link:** https://bitbucket.org/Olyno/skemail/src
