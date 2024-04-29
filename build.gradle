@@ -1,11 +1,14 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
 
-sourceCompatibility = 1.8
+group 'com.olyno.skemail'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     mavenCentral()
@@ -22,11 +25,8 @@ dependencies {
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
 }
 
-processResources {
-    filter(ReplaceTokens, tokens: [version: version])
-}
-
-shadowJar {
-    project.configurations.implementation.canBeResolved = true
-    configurations = [project.configurations.implementation]
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
