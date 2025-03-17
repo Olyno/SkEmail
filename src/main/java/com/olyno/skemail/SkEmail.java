@@ -177,7 +177,7 @@ public class SkEmail extends JavaPlugin {
 		}
 
         // Register Commands
-        getCommand("skemail").setExecutor(new Commands(this));
+        getCommand("skemail").setExecutor(new Commands());
 
         // Register Data
         dataFolder = getDataFolder();

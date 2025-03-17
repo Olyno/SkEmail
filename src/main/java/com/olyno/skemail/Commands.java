@@ -1,19 +1,17 @@
 package com.olyno.skemail;
 
+import static org.bukkit.ChatColor.BLUE;
+import static org.bukkit.ChatColor.DARK_BLUE;
+import static org.bukkit.ChatColor.GOLD;
+import static org.bukkit.ChatColor.GRAY;
+import static org.bukkit.ChatColor.WHITE;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import static org.bukkit.ChatColor.*;
-
 public class Commands implements CommandExecutor {
-
-    private final SkEmail plugin;
-
-    public Commands(SkEmail plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

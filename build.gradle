@@ -1,31 +1,31 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id 'java'
 }
 
-group 'com.olyno.skemail'
+group = 'com.olyno.skemail'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url 'https://oss.sonatype.org/content/groups/public/' }
-    maven { url 'https://repo.skriptlang.org/releases' }
-    maven { url 'https://repo.destroystokyo.com/repository/maven-public/' }
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://repo.skriptlang.org/releases' }
+    maven { url = 'https://repo.destroystokyo.com/repository/maven-public/' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
-    compileOnly 'com.github.SkriptLang:Skript:2.6.4'
+    compileOnly 'com.github.SkriptLang:Skript:2.10.2'
+
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
